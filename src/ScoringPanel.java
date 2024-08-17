@@ -2,14 +2,20 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ScoringPanel extends JPanel {
-    JButton remainingMines;
+    NumberPanel remainingMines;
     JButton restartButton;
-    JButton timer;
+    NumberPanel timer;
 
     ScoringPanel() {
-        remainingMines = new JButton();
+       setup();
+    }
+    public void setup(){
+        remainingMines = new NumberPanel();
         restartButton = new JButton();
-        timer = new JButton();
-        setLayout(new GridLayout(3, 1));
+        timer = new NumberPanel();
+        setLayout(new GridLayout(1, 3));
+        this.add(remainingMines);
+        this.add(restartButton);
+        this.add(timer);
     }
 }
