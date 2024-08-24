@@ -1,11 +1,11 @@
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 
 public class ScoringPanel extends JPanel {
     NumberPanel remainingMines;
     JButton restartButton;
     NumberPanel timer;
-
     ScoringPanel() {
        setup();
     }
@@ -15,14 +15,17 @@ public class ScoringPanel extends JPanel {
         remainingMines = new NumberPanel();
         timer = new NumberPanel();
         this.add(remainingMines);
-        setupRestartButton();
+        this.add(createRestartButton());
         this.add(timer);
     }
-    private void setupRestartButton(){
-        restartButton = new JButton();
-        restartButton.setPreferredSize(new Dimension(50,50));
-        //restartButton.setIcon();
+    private JButton createRestartButton(){
+        restartButton = new JButton(loadImage());
+        restartButton.setSize(50,50);
+        return restartButton;
 
-        this.add(restartButton);
+    }
+    public ImageIcon loadImage() {
+        URL imageURL = getClass().getResource("restartbutton.png");
+        return new ImageIcon(imageURL);
     }
 }
