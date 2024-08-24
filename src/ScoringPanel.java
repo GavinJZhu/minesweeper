@@ -10,12 +10,19 @@ public class ScoringPanel extends JPanel {
        setup();
     }
     public void setup(){
+        //setLayout(new GridLayout(1, 3));
+        setPreferredSize(new Dimension(100,100));
         remainingMines = new NumberPanel();
-        restartButton = new JButton();
         timer = new NumberPanel();
-        setLayout(new GridLayout(1, 3));
         this.add(remainingMines);
-        this.add(restartButton);
+        setupRestartButton();
         this.add(timer);
+    }
+    private void setupRestartButton(){
+        restartButton = new JButton();
+        restartButton.setPreferredSize(new Dimension(50,50));
+        //restartButton.setIcon();
+
+        this.add(restartButton);
     }
 }

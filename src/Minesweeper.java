@@ -16,6 +16,7 @@ public class Minesweeper {
         minesweeperFrame = new JFrame();
         minesweeperFrame.setLayout(new GridLayout(3,1));
         scoringPanel = new ScoringPanel();
+       //scoringPanel.setSize(100,100);
         gridPanel = new GridPanel();
         replayPanel = new ReplayPanel();
         //minesweeperFrame.addMouseListener(scoringPanel);
