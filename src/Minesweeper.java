@@ -6,6 +6,7 @@ public class Minesweeper {
     ScoringPanel scoringPanel; //ScoringPanel extends JPanel
     GridPanel gridPanel; //GridPanel extends JPanel
     ReplayPanel replayPanel; // ReplayPanel extends JPanel
+    //
     static final int WIDTH = 1000;
     static final int HEIGHT = 1000;
     public static void main(String[] args) {

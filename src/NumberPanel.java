@@ -13,4 +13,7 @@ public class NumberPanel extends JPanel {
     public void setNumber(int number){
         numberField.setText(String.valueOf(number));
     }
+    public void restart(){
+
+    }
 }

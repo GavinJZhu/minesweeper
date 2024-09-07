@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GridPanel extends JPanel {
+    ScoringPanel m_scoringPanel;
+    ReplayPanel m_replayPanel;
     GridPanel(){
         //add(new JButton("grid"));
         setup();
@@ -13,5 +15,11 @@ public class GridPanel extends JPanel {
             JButton button = new JButton();
             this.add(button);
         }
+    }
+    public void restart(){
+        setGamePanel(m_scoringPanel,m_replayPanel);
+    }
+    public void setGamePanel(ScoringPanel scoringPanel, ReplayPanel replayPanel){
+        System.out.println("testingGridPanel");
     }
 }
