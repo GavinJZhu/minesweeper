@@ -4,12 +4,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
 
-public class ScoringPanel extends JPanel {
+public class ScoringPanel extends JPanel implements ActionListener{
     NumberPanel m_remainingMinesPanel;
     JButton m_restartButton;
     NumberPanel m_timerPanel;
     GridPanel m_gridPanel;
     ReplayPanel m_replayPanel;
+    Minesweeper m_minesweeper;
     ScoringPanel() {
        setup();
     }
@@ -24,13 +25,7 @@ public class ScoringPanel extends JPanel {
     }
     private JButton createRestartButton(){
         m_restartButton = new JButton(loadImageRestartButton());
-        m_restartButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            restart();
-            System.out.println("testing action listener");
-            }
-        });
+        m_restartButton.addActionListener(this);
         m_restartButton.setSize(50,50);
         return m_restartButton;
 
@@ -40,9 +35,14 @@ public class ScoringPanel extends JPanel {
         return new ImageIcon(imageURL);
     }
     public void restart(){
-        setGamePanel(m_gridPanel, m_replayPanel);
+        System.out.println("testing scoring panel");
     }
-    public void setGamePanel(GridPanel gridPanel, ReplayPanel replayPanel){
-        System.out.println("testScoring");
+    public void setGamePanel(Minesweeper minesweeper){
+        m_minesweeper = minesweeper;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        restart();
     }
 }

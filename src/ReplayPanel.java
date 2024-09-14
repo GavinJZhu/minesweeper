@@ -14,9 +14,10 @@ public class ReplayPanel extends JPanel {
         this.add(slider);
     }
     public void restart(){
-        setGamePanel(m_gridPanel,m_scoringPanel);
+        System.out.println("testing replay panel");
     }
     public void setGamePanel(GridPanel gridPanel, ScoringPanel scoringPanel){
-        System.out.println("testingReplay");
+        m_gridPanel = gridPanel;
+        m_scoringPanel = scoringPanel;
     }
 }

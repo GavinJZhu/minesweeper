@@ -17,9 +17,10 @@ public class GridPanel extends JPanel {
         }
     }
     public void restart(){
-        setGamePanel(m_scoringPanel,m_replayPanel);
+        System.out.println("restarting grid panel");
     }
-    public void setGamePanel(ScoringPanel scoringPanel, ReplayPanel replayPanel){
-        System.out.println("testingGridPanel");
+    public void setGamePanels(ScoringPanel scoringPanel, ReplayPanel replayPanel){
+        m_scoringPanel = scoringPanel;
+        m_replayPanel = replayPanel;
     }
 }

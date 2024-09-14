@@ -6,7 +6,6 @@ public class Minesweeper {
     ScoringPanel scoringPanel; //ScoringPanel extends JPanel
     GridPanel gridPanel; //GridPanel extends JPanel
     ReplayPanel replayPanel; // ReplayPanel extends JPanel
-    //
     static final int WIDTH = 1000;
     static final int HEIGHT = 1000;
     public static void main(String[] args) {
@@ -17,6 +16,7 @@ public class Minesweeper {
         minesweeperFrame = new JFrame();
         minesweeperFrame.setLayout(new GridLayout(3,1));
         scoringPanel = new ScoringPanel();
+        scoringPanel.setGamePanel(this);
        //scoringPanel.setSize(100,100);
         gridPanel = new GridPanel();
         replayPanel = new ReplayPanel();
@@ -29,5 +29,8 @@ public class Minesweeper {
         minesweeperFrame.setSize(WIDTH, HEIGHT);
         minesweeperFrame.setVisible(true);
         minesweeperFrame.setDefaultCloseOperation(minesweeperFrame.EXIT_ON_CLOSE);
+    }
+    public void restart(){
+
     }
 }
