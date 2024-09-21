@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class Minesweeper {
     JFrame minesweeperFrame;
@@ -19,7 +20,9 @@ public class Minesweeper {
         scoringPanel.setGamePanel(this);
        //scoringPanel.setSize(100,100);
         gridPanel = new GridPanel();
+        gridPanel.setGamePanel(this);
         replayPanel = new ReplayPanel();
+        replayPanel.setGamePanel(this);
         //minesweeperFrame.addMouseListener(scoringPanel);
     }
     public void setup(){
@@ -31,6 +34,8 @@ public class Minesweeper {
         minesweeperFrame.setDefaultCloseOperation(minesweeperFrame.EXIT_ON_CLOSE);
     }
     public void restart(){
-
+        gridPanel.restart();
+        replayPanel.restart();
+        scoringPanel.restart();
     }
 }

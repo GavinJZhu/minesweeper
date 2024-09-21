@@ -35,7 +35,7 @@ public class ScoringPanel extends JPanel implements ActionListener{
         return new ImageIcon(imageURL);
     }
     public void restart(){
-        System.out.println("testing scoring panel");
+        System.out.println("reset game, clear game out of replay panel");
     }
     public void setGamePanel(Minesweeper minesweeper){
         m_minesweeper = minesweeper;
@@ -43,6 +43,6 @@ public class ScoringPanel extends JPanel implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        restart();
+        m_minesweeper.restart();
     }
 }

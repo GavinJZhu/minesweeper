@@ -1,8 +1,11 @@
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class ReplayPanel extends JPanel {
+public class ReplayPanel extends JPanel implements ActionListener {
     GridPanel m_gridPanel;
     ScoringPanel m_scoringPanel;
+    Minesweeper m_minesweeper;
     JSlider slider = new JSlider();
     JButton play = new JButton("play");
 
@@ -10,14 +13,20 @@ public class ReplayPanel extends JPanel {
        setup();
     }
     void setup(){
+        play.addActionListener(this);
         this.add(play);
         this.add(slider);
     }
     public void restart(){
-        System.out.println("testing replay panel");
+        System.out.println("replay clicks and cursor movements on the minesweeper board");
+        //replay clicks and cursor movements on the minesweeper board
     }
-    public void setGamePanel(GridPanel gridPanel, ScoringPanel scoringPanel){
-        m_gridPanel = gridPanel;
-        m_scoringPanel = scoringPanel;
+    public void setGamePanel(Minesweeper minesweeper){
+        m_minesweeper = minesweeper;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        m_minesweeper.restart();
     }
 }
