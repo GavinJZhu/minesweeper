@@ -12,10 +12,12 @@ public class GridPanel extends JPanel implements ActionListener {
         setup();
     }
     void setup(){
-        setLayout(new GridLayout(16,16));
+        GridLayout grid = new GridLayout(16,16);
+        setLayout(grid);
         for (int i=0; i<256; i++){
            // String buttonNumber = Integer.toString(i);
             JButton button = new JButton();
+            //button.setPreferredSize(new Dimension(5,5));
             button.addActionListener(this);
             this.add(button);
         }
