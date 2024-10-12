@@ -24,9 +24,10 @@ public class ScoringPanel extends JPanel implements ActionListener{
         this.add(m_timerPanel);
     }
     private JButton createRestartButton(){
-        m_restartButton = new JButton(loadImageRestartButton());
-        m_restartButton.addActionListener(this);
-        m_restartButton.setSize(50,50);
+            m_restartButton = new JButton();
+            m_restartButton.setIcon(loadImageRestartButton());
+            m_restartButton.addActionListener(this);
+            m_restartButton.setPreferredSize(new Dimension(50,50));
         return m_restartButton;
 
     }
