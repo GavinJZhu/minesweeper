@@ -1,7 +1,10 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.net.URL;
 
 public class GridPanel extends JPanel implements ActionListener {
@@ -26,10 +29,11 @@ public class GridPanel extends JPanel implements ActionListener {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
                  JButton button = new JButton();
-                 button.setIcon(changeButtonIcon());
+                 button.setIcon(changeButtonIcon(8));
                  button.setName("test");
                  this.add(button);
                  button.addActionListener(this);
+                 array[i][j] = button;
             }
         }
 
@@ -49,9 +53,17 @@ public class GridPanel extends JPanel implements ActionListener {
     public void setGamePanel(Minesweeper minesweeper){
        m_minesweeper = minesweeper;
     }
-    public ImageIcon changeButtonIcon() {
-        URL imageURL = getClass().getResource("minesweeper.jpg");
-        return new ImageIcon(imageURL);
+    public ImageIcon changeButtonIcon(int surroundingBombs) {
+        String iconFileName = "bomb"+surroundingBombs;
+        URL imageURL = getClass().getResource(iconFileName+".png");
+        BufferedImage image = null;
+        try {
+            image = ImageIO.read(imageURL);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Image scaledImage = image.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        return new ImageIcon(scaledImage);
     }
 
     @Override
