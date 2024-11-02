@@ -14,9 +14,6 @@ public class GridPanel extends JPanel implements ActionListener {
     Boolean hasBomb;
     int rows = 16;
     int columns = 16;
-    JButton[][] array = new JButton[rows][columns];
-    JButton m_button;
-
     GridPanel() {
         //add(new JButton("grid"));
         setup();
@@ -27,29 +24,25 @@ public class GridPanel extends JPanel implements ActionListener {
         setLayout(grid);
         setupButtons();
     }
-
     void setupButtons() {
+        GridButtons buttons = new GridButtons();
+        MinesweeperButton[][] array = buttons.getArrayOfButtons();
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
-                JButton button = new JButton();
-                button.setIcon(changeButtonIcon(8));
-                button.setActionCommand(i + ", " + j);
-                this.add(button);
-                button.addActionListener(this);
-                array[i][j] = button;
+                this.add(array[i][j]);
+                array[i][j].addActionListener(this);
             }
         }
     }
-
-    void setupButtons0() {
-        for (int i = 0; i < 256; i++) {
-            //String buttonNumber = Integer.toString(i);
-            m_button = new JButton();
-            //button.setPreferredSize(new Dimension(5,5));
-            m_button.addActionListener(this);
-            this.add(m_button);
-        }
-    }
+//    void setupButtons0() {
+//        for (int i = 0; i < 256; i++) {
+//            //String buttonNumber = Integer.toString(i);
+//            m_button = new JButton();
+//            //button.setPreferredSize(new Dimension(5,5));
+//            m_button.addActionListener(this);
+//            this.add(m_button);
+//        }
+//    }
 
     public void restart() {
         System.out.println("if won then communicate win with replay panel");
@@ -75,6 +68,10 @@ public class GridPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         System.out.println(e.getActionCommand());
+        MinesweeperButton button = (MinesweeperButton)e.getSource();
+        System.out.println(button.getActionCommand());
+        System.out.println(button.getRow());
+        System.out.println(button.getColumn());
 //      tbd: figure out how to identify what button was selected
 
     }
