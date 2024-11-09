@@ -14,6 +14,7 @@ public class GridPanel extends JPanel implements ActionListener {
     Boolean hasBomb;
     int rows = 16;
     int columns = 16;
+
     GridPanel() {
         //add(new JButton("grid"));
         setup();
@@ -24,6 +25,7 @@ public class GridPanel extends JPanel implements ActionListener {
         setLayout(grid);
         setupButtons();
     }
+
     void setupButtons() {
         GridButtons buttons = new GridButtons();
         MinesweeperButton[][] array = buttons.getArrayOfButtons();
@@ -34,15 +36,6 @@ public class GridPanel extends JPanel implements ActionListener {
             }
         }
     }
-//    void setupButtons0() {
-//        for (int i = 0; i < 256; i++) {
-//            //String buttonNumber = Integer.toString(i);
-//            m_button = new JButton();
-//            //button.setPreferredSize(new Dimension(5,5));
-//            m_button.addActionListener(this);
-//            this.add(m_button);
-//        }
-//    }
 
     public void restart() {
         System.out.println("if won then communicate win with replay panel");
@@ -67,13 +60,18 @@ public class GridPanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println(e.getActionCommand());
-        MinesweeperButton button = (MinesweeperButton)e.getSource();
-        System.out.println(button.getActionCommand());
-        System.out.println(button.getRow());
-        System.out.println(button.getColumn());
-//      tbd: figure out how to identify what button was selected
+        MinesweeperButton button = (MinesweeperButton) e.getSource();
+        bombCheck(button);
+    }
 
+    private static void bombCheck(MinesweeperButton button) {
+        int row = button.getRow();
+        int column = button.getColumn();
+        int buttonState = button.getButtonState();
+        System.out.println("row = " + row + ", column = " + column + ", Button state = " + buttonState);
+        if (buttonState == -1) {
+            System.out.println("Game Over");
+        }
     }
 
 }
