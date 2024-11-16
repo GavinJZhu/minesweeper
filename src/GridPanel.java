@@ -11,7 +11,6 @@ public class GridPanel extends JPanel implements ActionListener {
     ScoringPanel m_scoringPanel;
     ReplayPanel m_replayPanel;
     Minesweeper m_minesweeper;
-    Boolean hasBomb;
     int rows = 16;
     int columns = 16;
 
@@ -68,10 +67,9 @@ public class GridPanel extends JPanel implements ActionListener {
         int row = button.getRow();
         int column = button.getColumn();
         int buttonState = button.getButtonState();
-        System.out.println("row = " + row + ", column = " + column + ", Button state = " + buttonState);
+        System.out.println("row = " + row+ ", column = " + column + ", Button state = " + buttonState);
         if (buttonState == -1) {
             System.out.println("Game Over");
         }
     }
-
 }

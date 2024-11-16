@@ -10,7 +10,7 @@ public class GridButtons {
     int m_rows = 16;
     int m_columns = 16;
     Random random = new Random();
-    MinesweeperButton[][] m_arrayOfButtons = new MinesweeperButton[m_rows][m_columns];
+    MinesweeperButton[][] arrayOfButtons = new MinesweeperButton[m_rows][m_columns];
 
     // JButton m_button;
     GridButtons() {
@@ -24,7 +24,7 @@ public class GridButtons {
                 button.setIcon(changeButtonIcon(8)); //move to setButtonState
                 button.setRowColumn(i, j);
                 // Sets button location. Saves a button at row&column
-                m_arrayOfButtons[i][j] = button;
+                arrayOfButtons[i][j] = button;
             }
         }
         chooseBombs();
@@ -32,30 +32,55 @@ public class GridButtons {
 
     public void chooseBombs() {
         for (int i = 0; i < 40; i++) {
-            int randomX = random.nextInt(15) + 1;
-            int randomY = random.nextInt(15) + 1;
-            MinesweeperButton bomb = m_arrayOfButtons[randomX][randomY];
+            int randomRow = random.nextInt(15) + 1;
+            int randomColumn = random.nextInt(15) + 1;
+            MinesweeperButton bomb = arrayOfButtons[randomRow][randomColumn];
             bomb.setButtonState(-1);
             int buttonState = bomb.getButtonState();
-            System.out.println("bomb: " + randomX + ", " + randomY + " Button State: " + buttonState);
+            System.out.println("bomb: " + randomRow + ", " + randomColumn + " Button State: " + buttonState);
         }
 
     }
 
-    public ImageIcon changeButtonIcon(int surroundingBombs) {
-        String iconFileName = "bomb" + surroundingBombs;
-        URL imageURL = getClass().getResource(iconFileName + ".png");
-        BufferedImage image = null;
-        try {
-            image = ImageIO.read(imageURL);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    private void surroundingBombs(MinesweeperButton button) {
+        int row = button.getRow();
+        int column = button.getColumn();
+        int surroundingBombs = 0;
+        if (column > 0) {
+            int buttonStateLeft = arrayOfButtons[row][column - 1].getButtonState();
+            if (buttonStateLeft == -1){
+                surroundingBombs ++;
+            }
+            if (row>0){
+                int buttonStateTopLeft = arrayOfButtons[row-1][column - 1].getButtonState();
+                if(buttonStateTopLeft == -1){
+                    surroundingBombs ++;
+                }
+            }
+            if (row<15){
+                int buttonStateBottomLeft = arrayOfButtons[row+1][column - 1].getButtonState();
+                if(buttonStateBottomLeft == -1){
+                    surroundingBombs ++;
+                }
+            }
         }
-        Image scaledImage = image.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-        return new ImageIcon(scaledImage);
-    }
-
-    public MinesweeperButton[][] getArrayOfButtons() {
-        return m_arrayOfButtons;
+        if (column < 15) {
+            int buttonStateRight = arrayOfButtons[row][column+1].getButtonState();
+            if (buttonStateRight == -1){
+                surroundingBombs ++;
+            }
+            if (row>0){
+                int buttonStateTopRight = arrayOfButtons[row-1][column + 1].getButtonState();
+                if(buttonStateTopRight == -1){
+                    surroundingBombs ++;
+                }
+            }
+            if (row<15){
+                int buttonStateBottomLeft = arrayOfButtons[row+1][column + 1].getButtonState();
+                if(buttonStateBottomLeft == -1){
+                    surroundingBombs ++;
+                }
+            }
+        }
     }
 }
