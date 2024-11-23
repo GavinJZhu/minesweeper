@@ -38,8 +38,23 @@ public class GridButtons {
             bomb.setButtonState(-1);
             int buttonState = bomb.getButtonState();
             System.out.println("bomb: " + randomRow + ", " + randomColumn + " Button State: " + buttonState);
+            //surroundingBombs(bomb); does not work yet
         }
-
+    }
+    public ImageIcon changeButtonIcon(int surroundingBombs) {
+        String iconFileName = "bomb" + surroundingBombs;
+        URL imageURL = getClass().getResource(iconFileName + ".png");
+        BufferedImage image = null;
+        try {
+            image = ImageIO.read(imageURL);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Image scaledImage = image.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        return new ImageIcon(scaledImage);
+    }
+    public MinesweeperButton[][] getArrayOfButtons(){
+        return arrayOfButtons;
     }
 
     private void surroundingBombs(MinesweeperButton button) {
@@ -82,5 +97,18 @@ public class GridButtons {
                 }
             }
         }
+        if (row>0){
+            int buttonStateTop = arrayOfButtons[row-1][column].getButtonState();
+            if(buttonStateTop == -1){
+                surroundingBombs ++;
+            }
+        }
+        if (row<15){
+            int buttonStateTop = arrayOfButtons[row+1][column].getButtonState();
+            if(buttonStateTop == -1){
+                surroundingBombs ++;
+            }
+        }
+        button.setButtonState(surroundingBombs);
     }
 }

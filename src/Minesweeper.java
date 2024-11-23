@@ -29,11 +29,6 @@ public class Minesweeper {
         replayPanel.setGamePanel(this);
         //minesweeperFrame.addMouseListener(scoringPanel);
     }
-
-    public void setMinesweeperFormat() {
-
-    }
-
     public void setup() {
 //        minesweeperFrame.add(scoringPanel);
 //        minesweeperFrame.add(gridPanel);
