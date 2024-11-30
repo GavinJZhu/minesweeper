@@ -25,12 +25,14 @@ public class GridButtons {
                 button.setRowColumn(i, j);
                 // Sets button location. Saves a button at row&column
                 arrayOfButtons[i][j] = button;
+                //****set each button icon to be blank****
             }
         }
-        chooseBombs();
+        setBombs();
+        setNonBombs();
     }
 
-    public void chooseBombs() {
+    public void setBombs() {
         for (int i = 0; i < 40; i++) {
             int randomRow = random.nextInt(15) + 1;
             int randomColumn = random.nextInt(15) + 1;
@@ -39,6 +41,18 @@ public class GridButtons {
             int buttonState = bomb.getButtonState();
             System.out.println("bomb: " + randomRow + ", " + randomColumn + " Button State: " + buttonState);
             //surroundingBombs(bomb); does not work yet
+        }
+    }
+    public void setNonBombs(){
+        //1. create two for loops of 16... see setupButtons method
+        for (int i = 0; i < m_rows; i++) {
+            for (int j = 0; j < m_columns; j++) {
+                //2.    check if a button has a state of -1
+
+                //3.    if button's state is -1, move on to next button
+                //4.    if button's state is not -1, check number of surrounding bombs... call a method getSurroundingBombs
+                //5.    set button state to how many surrounding bombs there are
+            }
         }
     }
     public ImageIcon changeButtonIcon(int surroundingBombs) {
@@ -57,7 +71,7 @@ public class GridButtons {
         return arrayOfButtons;
     }
 
-    private void surroundingBombs(MinesweeperButton button) {
+    public void surroundingBombs(MinesweeperButton button) {
         int row = button.getRow();
         int column = button.getColumn();
         int surroundingBombs = 0;
@@ -91,8 +105,8 @@ public class GridButtons {
                 }
             }
             if (row<15){
-                int buttonStateBottomLeft = arrayOfButtons[row+1][column + 1].getButtonState();
-                if(buttonStateBottomLeft == -1){
+                int buttonStateBottomRight = arrayOfButtons[row+1][column + 1].getButtonState();
+                if(buttonStateBottomRight == -1){
                     surroundingBombs ++;
                 }
             }
@@ -104,8 +118,8 @@ public class GridButtons {
             }
         }
         if (row<15){
-            int buttonStateTop = arrayOfButtons[row+1][column].getButtonState();
-            if(buttonStateTop == -1){
+            int buttonStateBottom = arrayOfButtons[row+1][column].getButtonState();
+            if(buttonStateBottom == -1){
                 surroundingBombs ++;
             }
         }

@@ -11,6 +11,7 @@ public class GridPanel extends JPanel implements ActionListener {
     ScoringPanel m_scoringPanel;
     ReplayPanel m_replayPanel;
     Minesweeper m_minesweeper;
+    GridButtons gridButtons;
     int rows = 16;
     int columns = 16;
 
@@ -61,6 +62,7 @@ public class GridPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         MinesweeperButton button = (MinesweeperButton) e.getSource();
         bombCheck(button);
+        gridButtons.surroundingBombs(button);
     }
 
     private static void bombCheck(MinesweeperButton button) {
