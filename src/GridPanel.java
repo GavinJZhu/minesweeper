@@ -62,7 +62,6 @@ public class GridPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         MinesweeperButton button = (MinesweeperButton) e.getSource();
         bombCheck(button);
-        gridButtons.surroundingBombs(button);
     }
 
     private static void bombCheck(MinesweeperButton button) {

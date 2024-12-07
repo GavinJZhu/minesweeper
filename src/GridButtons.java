@@ -11,8 +11,7 @@ public class GridButtons {
     int m_columns = 16;
     Random random = new Random();
     MinesweeperButton[][] arrayOfButtons = new MinesweeperButton[m_rows][m_columns];
-
-    // JButton m_button;
+    // find icon for blank squares and bombs
     GridButtons() {
         setupButtons();
     }
@@ -21,7 +20,7 @@ public class GridButtons {
         for (int i = 0; i < m_rows; i++) {
             for (int j = 0; j < m_columns; j++) {
                 MinesweeperButton button = new MinesweeperButton();
-                button.setIcon(changeButtonIcon(8)); //move to setButtonState
+                button.setIcon(getButtonIcon(8)); //move to setButtonState
                 button.setRowColumn(i, j);
                 // Sets button location. Saves a button at row&column
                 arrayOfButtons[i][j] = button;
@@ -48,14 +47,22 @@ public class GridButtons {
         for (int i = 0; i < m_rows; i++) {
             for (int j = 0; j < m_columns; j++) {
                 //2.    check if a button has a state of -1
-
+                MinesweeperButton button = arrayOfButtons[i][j];
+                int buttonState = button.getButtonState();
                 //3.    if button's state is -1, move on to next button
+                if (buttonState == -1) {
+                    //move on to the next column
+                }
                 //4.    if button's state is not -1, check number of surrounding bombs... call a method getSurroundingBombs
-                //5.    set button state to how many surrounding bombs there are
+                else {
+                    //get number of bombs surrounding a button
+                    button.setButtonState(getSurroundingBombs(button));
+                    button.setIcon(getButtonIcon(buttonState));
+                }
             }
         }
     }
-    public ImageIcon changeButtonIcon(int surroundingBombs) {
+    public ImageIcon getButtonIcon(int surroundingBombs) {
         String iconFileName = "bomb" + surroundingBombs;
         URL imageURL = getClass().getResource(iconFileName + ".png");
         BufferedImage image = null;
@@ -71,7 +78,7 @@ public class GridButtons {
         return arrayOfButtons;
     }
 
-    public void surroundingBombs(MinesweeperButton button) {
+    public int getSurroundingBombs(MinesweeperButton button) {
         int row = button.getRow();
         int column = button.getColumn();
         int surroundingBombs = 0;
@@ -123,6 +130,6 @@ public class GridButtons {
                 surroundingBombs ++;
             }
         }
-        button.setButtonState(surroundingBombs);
+        return surroundingBombs;
     }
 }
