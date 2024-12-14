@@ -20,7 +20,7 @@ public class GridButtons {
         for (int i = 0; i < m_rows; i++) {
             for (int j = 0; j < m_columns; j++) {
                 MinesweeperButton button = new MinesweeperButton();
-                button.setIcon(getButtonIcon(8)); //move to setButtonState
+                //button.setIcon(getButtonIcon(8)); //move to setButtonState
                 button.setRowColumn(i, j);
                 // Sets button location. Saves a button at row&column
                 arrayOfButtons[i][j] = button;
@@ -62,17 +62,35 @@ public class GridButtons {
             }
         }
     }
+    //-1 = bomb, 0 = no surrounding bombs, 1-8 = 1-8 surrounding bombs
     public ImageIcon getButtonIcon(int surroundingBombs) {
+        ImageIcon defaultIcon = new ImageIcon();
+        //create filename based off surrounding bombs
         String iconFileName = "bomb" + surroundingBombs;
+        //create URL for file
         URL imageURL = getClass().getResource(iconFileName + ".png");
-        BufferedImage image = null;
-        try {
-            image = ImageIO.read(imageURL);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        //check if imageURL is null/empty
+        //System.out.println(imageURL);
+        if(imageURL == null){
+            //got an invalid url... file doesn't exist
+            System.out.println("imageURL is null, iconFileName:"+iconFileName);
+
         }
-        Image scaledImage = image.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-        return new ImageIcon(scaledImage);
+        else{
+            //got a valid url
+            BufferedImage image = null;
+            try {
+                //reads the url/file and gets an image based off it, BufferedImage
+                image = ImageIO.read(imageURL);
+            }
+            catch (IOException e) {
+                //crashes program if there was an error reading file
+                throw new RuntimeException(e);
+            }
+            Image scaledImage = image.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+            return new ImageIcon(scaledImage);
+        }
+        return defaultIcon;
     }
     public MinesweeperButton[][] getArrayOfButtons(){
         return arrayOfButtons;
