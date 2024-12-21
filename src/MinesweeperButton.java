@@ -25,4 +25,14 @@ public class MinesweeperButton extends JButton {
     public void setButtonState(int buttonState) {
         this.buttonState = buttonState;
     }
+    public boolean isBomb(){
+//        int buttonState = getButtonState();
+//        if (buttonState == -1){
+//            return true;
+//        }
+//        else{
+//            return false;
+//        }
+        return getButtonState() == -1;
+    }
 }

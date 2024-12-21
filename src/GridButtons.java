@@ -96,11 +96,82 @@ public class GridButtons {
         return arrayOfButtons;
     }
 
+    public MinesweeperButton getButton(int row, int column){
+        MinesweeperButton button = null;
+        //if row and column are valid, get the button; otherwise return null
+        /*
+        if ((row >= 0) && (row <= m_rows-1)){
+            if((column >= 0) && (column<=m_columns-1)) {
+                button = arrayOfButtons[row][column];
+            }
+        }
+        */
+
+
+        if ((row <= 0) || (row >= m_rows)){
+            // row is invalid
+        }
+        else if ((column <= 0) || (column >= m_columns))
+        {
+            // column is invalid
+        }
+        else
+        {
+            // valid button
+            button = arrayOfButtons[row][column];
+        }
+
+        return button;
+    }
+
     public int getSurroundingBombs(MinesweeperButton button) {
         int row = button.getRow();
         int column = button.getColumn();
         int surroundingBombs = 0;
-        if (column > 0) {
+
+        MinesweeperButton temp = null;
+
+        //get north button
+        temp = getButton(row-1, column);
+        if ( (temp != null) && (temp.isBomb()) ){
+            surroundingBombs++;
+        }
+        //get north east button
+        temp = getButton(row-1, column+1);
+        if ( (temp != null) && (temp.isBomb()) ){
+            surroundingBombs++;
+        }
+        //get north west bomb
+        temp = getButton(row-1, column-1);
+        if ( (temp != null) && (temp.isBomb()) ){
+            surroundingBombs++;
+        }
+        //get south bomb
+        temp = getButton(row+1, column);
+        if ( (temp != null) && (temp.isBomb()) ){
+            surroundingBombs++;
+        }
+        //get south east bomb
+        temp = getButton(row+1, column+1);
+        if ( (temp != null) && (temp.isBomb()) ){
+            surroundingBombs++;
+        }
+        //get south west bomb
+        temp = getButton(row+1, column-1);
+        if ( (temp != null) && (temp.isBomb()) ){
+            surroundingBombs++;
+        }
+        //get west bomb
+        temp = getButton(row, column-1);
+        if ( (temp != null) && (temp.isBomb()) ){
+            surroundingBombs++;
+        }
+        //get east bomb
+        temp = getButton(row, column+1);
+        if ( (temp != null) && (temp.isBomb()) ){
+            surroundingBombs++;
+        }
+        /*if (column > 0) {
             int buttonStateLeft = arrayOfButtons[row][column - 1].getButtonState();
             if (buttonStateLeft == -1){
                 surroundingBombs ++;
@@ -148,6 +219,7 @@ public class GridButtons {
                 surroundingBombs ++;
             }
         }
+         */
         return surroundingBombs;
     }
 }
