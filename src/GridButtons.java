@@ -2,6 +2,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Random;
@@ -57,20 +58,23 @@ public class GridButtons {
                 else {
                     //get number of bombs surrounding a button
                     button.setButtonState(getSurroundingBombs(button));
-                    button.setIcon(getButtonIcon(buttonState));
                 }
+                button.setIcon(getButtonIcon(buttonState));
             }
         }
     }
     //-1 = bomb, 0 = no surrounding bombs, 1-8 = 1-8 surrounding bombs
     public ImageIcon getButtonIcon(int surroundingBombs) {
         ImageIcon defaultIcon = new ImageIcon();
+        //creates string to convert surrounding bombs int to string
+        String surroundingBombsString = String.valueOf(surroundingBombs);
+        System.out.println(surroundingBombsString);
         //create filename based off surrounding bombs
-        String iconFileName = "bomb" + surroundingBombs;
+        String iconFileName = "bomb" + surroundingBombsString;
         //create URL for file
         URL imageURL = getClass().getResource(iconFileName + ".png");
         //check if imageURL is null/empty
-        //System.out.println(imageURL);
+        System.out.println(imageURL);
         if(imageURL == null){
             //got an invalid url... file doesn't exist
             System.out.println("imageURL is null, iconFileName:"+iconFileName);
@@ -171,55 +175,6 @@ public class GridButtons {
         if ( (temp != null) && (temp.isBomb()) ){
             surroundingBombs++;
         }
-        /*if (column > 0) {
-            int buttonStateLeft = arrayOfButtons[row][column - 1].getButtonState();
-            if (buttonStateLeft == -1){
-                surroundingBombs ++;
-            }
-            if (row>0){
-                int buttonStateTopLeft = arrayOfButtons[row-1][column - 1].getButtonState();
-                if(buttonStateTopLeft == -1){
-                    surroundingBombs ++;
-                }
-            }
-            if (row<15){
-                int buttonStateBottomLeft = arrayOfButtons[row+1][column - 1].getButtonState();
-                if(buttonStateBottomLeft == -1){
-                    surroundingBombs ++;
-                }
-            }
-        }
-        if (column < 15) {
-            int buttonStateRight = arrayOfButtons[row][column+1].getButtonState();
-            if (buttonStateRight == -1){
-                surroundingBombs ++;
-            }
-            if (row>0){
-                int buttonStateTopRight = arrayOfButtons[row-1][column + 1].getButtonState();
-                if(buttonStateTopRight == -1){
-                    surroundingBombs ++;
-                }
-            }
-            if (row<15){
-                int buttonStateBottomRight = arrayOfButtons[row+1][column + 1].getButtonState();
-                if(buttonStateBottomRight == -1){
-                    surroundingBombs ++;
-                }
-            }
-        }
-        if (row>0){
-            int buttonStateTop = arrayOfButtons[row-1][column].getButtonState();
-            if(buttonStateTop == -1){
-                surroundingBombs ++;
-            }
-        }
-        if (row<15){
-            int buttonStateBottom = arrayOfButtons[row+1][column].getButtonState();
-            if(buttonStateBottom == -1){
-                surroundingBombs ++;
-            }
-        }
-         */
         return surroundingBombs;
     }
 }
