@@ -3,7 +3,7 @@ import javax.swing.*;
 public class MinesweeperButton extends JButton {
     private int row;
     private int column;
-    private int buttonState; //-1 = bomb, 0 = blank, 1-8 = surrounding bomb number
+    private int bombCount; //-1 = bomb, 0 = blank, 1-8 = surrounding bomb number
 
     public void setRowColumn(int row, int column) {
         this.row = row;
@@ -18,12 +18,12 @@ public class MinesweeperButton extends JButton {
         return column;
     }
 
-    public int getButtonState() {
-        return buttonState;
+    public int getBombCount() {
+        return bombCount;
     }
 
-    public void setButtonState(int buttonState) {
-        this.buttonState = buttonState;
+    public void setBombCount(int bombCount) {
+        this.bombCount = bombCount;
     }
     public boolean isBomb(){
 //        int buttonState = getButtonState();
@@ -33,6 +33,6 @@ public class MinesweeperButton extends JButton {
 //        else{
 //            return false;
 //        }
-        return getButtonState() == -1;
+        return getBombCount() == -1;
     }
 }

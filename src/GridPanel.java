@@ -3,6 +3,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
@@ -48,6 +49,7 @@ public class GridPanel extends JPanel implements ActionListener {
     public ImageIcon changeButtonIcon(int surroundingBombs) {
         String iconFileName = "bomb" + surroundingBombs;
         URL imageURL = getClass().getResource(iconFileName + ".png");
+        System.out.println(imageURL);
         BufferedImage image = null;
         try {
             image = ImageIO.read(imageURL);
@@ -60,17 +62,28 @@ public class GridPanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        //get the button thats clicked
         MinesweeperButton button = (MinesweeperButton) e.getSource();
-        bombCheck(button);
-    }
 
-    private static void bombCheck(MinesweeperButton button) {
         int row = button.getRow();
         int column = button.getColumn();
-        int buttonState = button.getButtonState();
-        System.out.println("row = " + row+ ", column = " + column + ", Button state = " + buttonState);
-        if (buttonState == -1) {
+        System.out.println("row = " + row+ ", column = " + column + ", bomb count = " + button.getBombCount());
+        //set the icon of the button clicked
+        button.setIcon(changeButtonIcon(button.getBombCount()));
+        if (isBomb(button)) {
             System.out.println("Game Over");
         }
+
+    }
+    void mouseClicked(MouseEvent e) {
+        if (e.getButton() == MouseEvent.BUTTON3) {
+
+        }
+    }
+
+    public boolean isBomb(MinesweeperButton button) {
+        boolean isBomb = false;
+        int buttonState = button.getBombCount();
+        return isBomb;
     }
 }

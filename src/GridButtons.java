@@ -2,7 +2,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Random;
@@ -26,9 +25,13 @@ public class GridButtons {
                 // Sets button location. Saves a button at row&column
                 arrayOfButtons[i][j] = button;
                 //****set each button icon to be blank****
+                //defaults each button to 0 bombs
+                button.setBombCount(0);
             }
         }
+        // chooses locations for bombs and sets their state to -1
         setBombs();
+        // sets each (nonBomb) button's bombs corresponding to the number of surrounding bombs
         setNonBombs();
     }
 
@@ -37,10 +40,9 @@ public class GridButtons {
             int randomRow = random.nextInt(15) + 1;
             int randomColumn = random.nextInt(15) + 1;
             MinesweeperButton bomb = arrayOfButtons[randomRow][randomColumn];
-            bomb.setButtonState(-1);
-            int buttonState = bomb.getButtonState();
+            bomb.setBombCount(-1);
+            int buttonState = bomb.getBombCount();
             System.out.println("bomb: " + randomRow + ", " + randomColumn + " Button State: " + buttonState);
-            //surroundingBombs(bomb); does not work yet
         }
     }
     public void setNonBombs(){
@@ -49,17 +51,17 @@ public class GridButtons {
             for (int j = 0; j < m_columns; j++) {
                 //2.    check if a button has a state of -1
                 MinesweeperButton button = arrayOfButtons[i][j];
-                int buttonState = button.getButtonState();
+                int bombCount = button.getBombCount();
                 //3.    if button's state is -1, move on to next button
-                if (buttonState == -1) {
+                if (bombCount == -1) {
                     //move on to the next column
                 }
                 //4.    if button's state is not -1, check number of surrounding bombs... call a method getSurroundingBombs
                 else {
                     //get number of bombs surrounding a button
-                    button.setButtonState(getSurroundingBombs(button));
+                    button.setBombCount(getSurroundingBombs(button));
                 }
-                button.setIcon(getButtonIcon(buttonState));
+                //button.setIcon(getButtonIcon(bombCount));
             }
         }
     }
