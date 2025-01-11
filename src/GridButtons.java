@@ -7,10 +7,10 @@ import java.net.URL;
 import java.util.Random;
 
 public class GridButtons {
-    int m_rows = 16;
-    int m_columns = 16;
+    static int m_rows = 16;
+    static int m_columns = 16;
     Random random = new Random();
-    MinesweeperButton[][] arrayOfButtons = new MinesweeperButton[m_rows][m_columns];
+    static MinesweeperButton[][] arrayOfButtons = new MinesweeperButton[m_rows][m_columns];
     // find icon for blank squares and bombs
     GridButtons() {
         setupButtons();
@@ -102,7 +102,7 @@ public class GridButtons {
         return arrayOfButtons;
     }
 
-    public MinesweeperButton getButton(int row, int column){
+    public static MinesweeperButton getButton(int row, int column){
         MinesweeperButton button = null;
         //if row and column are valid, get the button; otherwise return null
         /*

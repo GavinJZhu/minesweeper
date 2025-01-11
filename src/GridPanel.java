@@ -60,6 +60,7 @@ public class GridPanel extends JPanel implements ActionListener {
         return new ImageIcon(scaledImage);
     }
 
+
     @Override
     public void actionPerformed(ActionEvent e) {
         //get the button thats clicked
@@ -73,17 +74,73 @@ public class GridPanel extends JPanel implements ActionListener {
         if (isBomb(button)) {
             System.out.println("Game Over");
         }
-
-    }
-    void mouseClicked(MouseEvent e) {
-        if (e.getButton() == MouseEvent.BUTTON3) {
-
+        else if(isBlank(button)){
+            spreadBlank(button);
         }
     }
-
+    //public boolean
     public boolean isBomb(MinesweeperButton button) {
         boolean isBomb = false;
         int buttonState = button.getBombCount();
+        if(buttonState == -1){
+            isBomb = true;
+        }
         return isBomb;
+    }
+    public boolean isBlank(MinesweeperButton button) {
+        boolean isBlank = false;
+        int buttonState = button.getBombCount();
+        if(buttonState == 0){
+            isBlank = true;
+
+        }
+        return isBlank;
+    }
+    public void spreadBlank(MinesweeperButton button) {
+        //need surrounding numbers to appear and also need recursion
+        int row = button.getRow();
+        int column = button.getColumn();
+        MinesweeperButton temp = null;
+
+        //get north button
+        temp = GridButtons.getButton(row-1, column);
+        if ( (temp != null) && (temp.isBlank()) ){
+            temp.setIcon(changeButtonIcon(temp.getBombCount()));
+        }
+        //get north east button
+        temp = GridButtons.getButton(row-1, column+1);
+        if ( (temp != null) && (temp.isBlank()) ){
+            temp.setIcon(changeButtonIcon(temp.getBombCount()));
+        }
+        //get north west bomb
+        temp = GridButtons.getButton(row-1, column-1);
+        if ( (temp != null) && (temp.isBlank()) ){
+            temp.setIcon(changeButtonIcon(temp.getBombCount()));
+        }
+        //get south bomb
+        temp = GridButtons.getButton(row+1, column);
+        if ( (temp != null) && (temp.isBlank()) ){
+            temp.setIcon(changeButtonIcon(temp.getBombCount()));
+        }
+        //get south east bomb
+        temp = GridButtons.getButton(row+1, column+1);
+        if ( (temp != null) && (temp.isBlank()) ){
+            temp.setIcon(changeButtonIcon(temp.getBombCount()));
+        }
+        //get south west bomb
+        temp = GridButtons.getButton(row+1, column-1);
+        if ( (temp != null) && (temp.isBlank()) ){
+            temp.setIcon(changeButtonIcon(temp.getBombCount()));
+        }
+        //get west bomb
+        temp = GridButtons.getButton(row, column-1);
+        if ( (temp != null) && (temp.isBlank()) ){
+            temp.setIcon(changeButtonIcon(temp.getBombCount()));
+        }
+        //get east bomb
+        temp = GridButtons.getButton(row, column+1);
+        if ( (temp != null) && (temp.isBlank()) ){
+            temp.setIcon(changeButtonIcon(temp.getBombCount()));
+        }
     }
 }
