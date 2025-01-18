@@ -3,7 +3,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
@@ -65,17 +64,17 @@ public class GridPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         //get the button thats clicked
         MinesweeperButton button = (MinesweeperButton) e.getSource();
-
         int row = button.getRow();
         int column = button.getColumn();
         System.out.println("row = " + row+ ", column = " + column + ", bomb count = " + button.getBombCount());
+        button.setRevealed(true);
         //set the icon of the button clicked
         button.setIcon(changeButtonIcon(button.getBombCount()));
         if (isBomb(button)) {
             System.out.println("Game Over");
         }
         else if(isBlank(button)){
-            spreadBlank(button);
+            recursivelySpreadBlanks(button);
         }
     }
     //public boolean
@@ -96,7 +95,13 @@ public class GridPanel extends JPanel implements ActionListener {
         }
         return isBlank;
     }
-    public void spreadBlank(MinesweeperButton button) {
+    public boolean isButtonRecursionNeeded(MinesweeperButton button){
+        int row = button.getRow();
+        int column = button.getColumn();
+        MinesweeperButton temp = null;
+
+    }
+    public void recursivelySpreadBlanks(MinesweeperButton button) {
         //need surrounding numbers to appear and also need recursion
         int row = button.getRow();
         int column = button.getColumn();
@@ -104,9 +109,26 @@ public class GridPanel extends JPanel implements ActionListener {
 
         //get north button
         temp = GridButtons.getButton(row-1, column);
-        if ( (temp != null) && (temp.isBlank()) ){
-            temp.setIcon(changeButtonIcon(temp.getBombCount()));
+        if ( temp == null )
+        {
+            // Button is invalid, does not existence....outside our GRID
         }
+        else if ( temp.isRevealed() )
+        {
+            // Button has already been revealed...no further processing/checks needed
+        }
+        else
+        {
+            // Reveal button and set the icon
+            temp.setRevealed( true );
+            temp.setIcon(changeButtonIcon(temp.getBombCount()));
+            if ( temp.isBlank() == true)
+            {
+                // recursively spread blanks for this button
+                recursivelySpreadBlanks(temp);
+            }
+        }
+
         //get north east button
         temp = GridButtons.getButton(row-1, column+1);
         if ( (temp != null) && (temp.isBlank()) ){
