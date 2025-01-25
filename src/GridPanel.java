@@ -75,6 +75,9 @@ public class GridPanel extends JPanel implements ActionListener {
         }
         else if(isBlank(button)){
             recursivelySpreadBlanks(button);
+            if(isButtonRecursionNeeded(button)){
+                recursivelySpreadBlanks(button);
+            }
         }
     }
     //public boolean
@@ -95,11 +98,36 @@ public class GridPanel extends JPanel implements ActionListener {
         }
         return isBlank;
     }
+    public void buttonRecursionFormat(MinesweeperButton button){
+        if ( button == null )
+        {
+            // Button is invalid, does not existence....outside our GRID
+        }
+        else if ( button.isRevealed() )
+        {
+            // Button has already been revealed...no further processing/checks needed
+        }
+        else
+        {
+            // Reveal button and set the icon
+            button.setRevealed( true );
+            button.setIcon(changeButtonIcon(button.getBombCount()));
+            if (button.isBlank())
+            {
+                // recursively spread blanks for this button
+                recursivelySpreadBlanks(button);
+            }
+        }
+    }
     public boolean isButtonRecursionNeeded(MinesweeperButton button){
-        int row = button.getRow();
-        int column = button.getColumn();
-        MinesweeperButton temp = null;
-
+//      int row = button.getRow();
+//      int column = button.getColumn();
+        boolean isButtonRecursionNeeded = false;
+//      MinesweeperButton temp = null;
+        if(!button.isRevealed() && button.isBlank()){
+            isButtonRecursionNeeded = true;
+        }
+        return isButtonRecursionNeeded;
     }
     public void recursivelySpreadBlanks(MinesweeperButton button) {
         //need surrounding numbers to appear and also need recursion
@@ -108,61 +136,30 @@ public class GridPanel extends JPanel implements ActionListener {
         MinesweeperButton temp = null;
 
         //get north button
+        if(row>0){
         temp = GridButtons.getButton(row-1, column);
-        if ( temp == null )
-        {
-            // Button is invalid, does not existence....outside our GRID
+        buttonRecursionFormat(temp);
         }
-        else if ( temp.isRevealed() )
-        {
-            // Button has already been revealed...no further processing/checks needed
-        }
-        else
-        {
-            // Reveal button and set the icon
-            temp.setRevealed( true );
-            temp.setIcon(changeButtonIcon(temp.getBombCount()));
-            if ( temp.isBlank() == true)
-            {
-                // recursively spread blanks for this button
-                recursivelySpreadBlanks(temp);
-            }
-        }
-
         //get north east button
         temp = GridButtons.getButton(row-1, column+1);
-        if ( (temp != null) && (temp.isBlank()) ){
-            temp.setIcon(changeButtonIcon(temp.getBombCount()));
-        }
-        //get north west bomb
+        buttonRecursionFormat(temp);
+        //get north west button
         temp = GridButtons.getButton(row-1, column-1);
-        if ( (temp != null) && (temp.isBlank()) ){
-            temp.setIcon(changeButtonIcon(temp.getBombCount()));
-        }
-        //get south bomb
+        buttonRecursionFormat(temp);
+        //get south button
         temp = GridButtons.getButton(row+1, column);
-        if ( (temp != null) && (temp.isBlank()) ){
-            temp.setIcon(changeButtonIcon(temp.getBombCount()));
-        }
-        //get south east bomb
+        buttonRecursionFormat(temp);
+        //get south east button
         temp = GridButtons.getButton(row+1, column+1);
-        if ( (temp != null) && (temp.isBlank()) ){
-            temp.setIcon(changeButtonIcon(temp.getBombCount()));
-        }
-        //get south west bomb
+        buttonRecursionFormat(temp);
+        //get south west button
         temp = GridButtons.getButton(row+1, column-1);
-        if ( (temp != null) && (temp.isBlank()) ){
-            temp.setIcon(changeButtonIcon(temp.getBombCount()));
-        }
-        //get west bomb
+        buttonRecursionFormat(temp);
+        //get west button
         temp = GridButtons.getButton(row, column-1);
-        if ( (temp != null) && (temp.isBlank()) ){
-            temp.setIcon(changeButtonIcon(temp.getBombCount()));
-        }
-        //get east bomb
+        buttonRecursionFormat(temp);
+        //get east button
         temp = GridButtons.getButton(row, column+1);
-        if ( (temp != null) && (temp.isBlank()) ){
-            temp.setIcon(changeButtonIcon(temp.getBombCount()));
-        }
+        buttonRecursionFormat(temp);
     }
 }
