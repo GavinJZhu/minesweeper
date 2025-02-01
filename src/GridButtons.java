@@ -105,15 +105,6 @@ public class GridButtons {
     public static MinesweeperButton getButton(int row, int column){
         MinesweeperButton button = null;  // default.  invalid button...outside of GRID
         //if row and column are valid, get the button; otherwise return null
-        /*
-        if ((row >= 0) && (row <= m_rows-1)){
-            if((column >= 0) && (column<=m_columns-1)) {
-                button = arrayOfButtons[row][column];
-            }
-        }
-        */
-
-
         if ((row <= 0) || (row >= m_rows)){
             // row is invalid...outside our GRID
         }
