@@ -48,7 +48,7 @@ public class GridPanel extends JPanel implements ActionListener {
     public ImageIcon changeButtonIcon(int surroundingBombs) {
         String iconFileName = "bomb" + surroundingBombs;
         URL imageURL = getClass().getResource(iconFileName + ".png");
-        System.out.println(imageURL);
+        //System.out.println(imageURL);
         BufferedImage image = null;
         try {
             image = ImageIO.read(imageURL);
@@ -129,52 +129,13 @@ public class GridPanel extends JPanel implements ActionListener {
         }
         return isButtonRecursionNeeded;
     }
-
-    public void recursivelySpreadBlanks(MinesweeperButton button) {
-        //need surrounding numbers to appear and also need recursion
-        int row = button.getRow();
-        int column = button.getColumn();
-        MinesweeperButton temp = null;
-
-        //get north button
-        //if row is 0, then stop spreading north\
-        //otherwise, continue spreading north
-        System.out.println("recursively spreading blanks for north button, " + row + ", " + column);
-        temp = GridButtons.getButton(row - 1, column);
-        setButtonStatus(temp);
-
-        //get north east button
-        System.out.println("recursively spreading blanks for northeast button, " + row + ", " + column);
-        temp = GridButtons.getButton(row - 1, column + 1);
-        setButtonStatus(temp);
-
-        //get north west button
-        temp = GridButtons.getButton(row - 1, column - 1);
-        setButtonStatus(temp);
-        //get south button
-        temp = GridButtons.getButton(row + 1, column);
-        setButtonStatus(temp);
-        //get south east button
-        temp = GridButtons.getButton(row + 1, column + 1);
-        setButtonStatus(temp);
-        //get south west button
-        temp = GridButtons.getButton(row + 1, column - 1);
-        setButtonStatus(temp);
-        //get west button
-        temp = GridButtons.getButton(row, column - 1);
-        setButtonStatus(temp);
-        //get east button
-        temp = GridButtons.getButton(row, column + 1);
-        setButtonStatus(temp);
-    }
-
     public void spreadBlanks(MinesweeperButton button) {
         if (button == null) {
             //stop recursion, invalid button
-            System.out.println("test null button, spread blanks");
+            System.out.println("button is outside the board, stop spread blanks");
         } else if (!isButtonRecursionNeeded(button)) {
             //if false, stop recursion
-            System.out.println("test isButtonRecursionNeeded, spread blanks");
+            System.out.println("if button is already revealed and/or is blank, don't spread to that square");
             setButtonStatus(button);
         } else {
             //set the button's status to be revealed and sets the button's icon

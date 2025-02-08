@@ -43,6 +43,7 @@ public class GridButtons {
             bomb.setBombCount(-1);
             int buttonState = bomb.getBombCount();
             System.out.println("bomb: " + randomRow + ", " + randomColumn + " Button State: " + buttonState);
+            bomb.setIcon(getButtonIcon(buttonState)); //comment back on later
         }
     }
     public void setNonBombs(){
@@ -51,17 +52,20 @@ public class GridButtons {
             for (int j = 0; j < m_columns; j++) {
                 //2.    check if a button has a state of -1
                 MinesweeperButton button = arrayOfButtons[i][j];
-                int bombCount = button.getBombCount();
+                int bc = button.getBombCount();
                 //3.    if button's state is -1, move on to next button
-                if (bombCount == -1) {
-                    //move on to the next column
+                if (bc == -1) {
+                    //skip button because bombs are already set
                 }
                 //4.    if button's state is not -1, check number of surrounding bombs... call a method getSurroundingBombs
                 else {
                     //get number of bombs surrounding a button
-                    button.setBombCount(getSurroundingBombs(button));
+                    int surroundingBombs = getSurroundingBombs(button);
+                    if (surroundingBombs>0) {
+                        button.setBombCount(surroundingBombs);
+                        button.setIcon(getButtonIcon(surroundingBombs)); //comment back on later
+                    }
                 }
-                //button.setIcon(getButtonIcon(bombCount));
             }
         }
     }
@@ -70,7 +74,7 @@ public class GridButtons {
         ImageIcon defaultIcon = new ImageIcon();
         //creates string to convert surrounding bombs int to string
         String surroundingBombsString = String.valueOf(surroundingBombs);
-        System.out.println(surroundingBombsString);
+        //System.out.println(surroundingBombsString);
         //create filename based off surrounding bombs
         String iconFileName = "bomb" + surroundingBombsString;
         //create URL for file
