@@ -3,11 +3,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 
-public class GridPanel extends JPanel implements ActionListener {
+public class GridPanel extends JPanel implements ActionListener, MouseListener {
     ScoringPanel m_scoringPanel;
     ReplayPanel m_replayPanel;
     Minesweeper m_minesweeper;
@@ -76,8 +78,7 @@ public class GridPanel extends JPanel implements ActionListener {
 //            if(isButtonRecursionNeeded(button)){
 //                recursivelySpreadBlanks(button);
             //}
-        }
-        else {
+        } else {
             setButtonStatus(button);
         }
 
@@ -138,15 +139,14 @@ public class GridPanel extends JPanel implements ActionListener {
             System.out.println("if button is already revealed and/or is blank, don't spread to that square");
             setButtonStatus(button);
         } else {
-            //set the button's status to be revealed and sets the button's icon
-            setButtonStatus(button);
-
             //now spread surrounding buttons
             //get row and column array indices
             int row = button.getRow();
             int column = button.getColumn();
 
-            System.out.println("recursively spreading blanks for north button, " + row + ", " + column);
+            System.out.println("recursively spreading blanks for button, " + row + ", " + column);
+            //set the button's status to be revealed and sets the button's icon
+            setButtonStatus(button);
             //get north button and recursively spread blanks
             spreadBlanks(GridButtons.getButton(row - 1, column));
             //get northeast button and recursively spread blanks
@@ -164,5 +164,34 @@ public class GridPanel extends JPanel implements ActionListener {
             //get southwest button and recursively spread blanks
             spreadBlanks(GridButtons.getButton(row + 1, column - 1));
         }
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        MinesweeperButton button = (MinesweeperButton) e.getSource();
+        if (e.getButton() == MouseEvent.BUTTON3){
+            button.setFlagged(true);
+            button.setIcon("minesweeperFlag.png");
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
     }
 }
