@@ -8,18 +8,23 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLOutput;
 
-public class GridPanel extends JPanel implements ActionListener, MouseListener {
+public class GridPanel extends JPanel implements MouseListener {
     ScoringPanel m_scoringPanel;
     ReplayPanel m_replayPanel;
     Minesweeper m_minesweeper;
     GridButtons gridButtons;
+    int revealedAmount = 0;
     int rows = 16;
     int columns = 16;
 
     GridPanel() {
         //add(new JButton("grid"));
         setup();
+        if (revealedAmount == 216){
+            System.out.println("You win!");
+        }
     }
 
     void setup() {
@@ -34,7 +39,7 @@ public class GridPanel extends JPanel implements ActionListener, MouseListener {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
                 this.add(array[i][j]);
-                array[i][j].addActionListener(this);
+                array[i][j].addMouseListener(this);
             }
         }
     }
@@ -60,30 +65,6 @@ public class GridPanel extends JPanel implements ActionListener, MouseListener {
         Image scaledImage = image.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
         return new ImageIcon(scaledImage);
     }
-
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        //get the button thats clicked
-        MinesweeperButton button = (MinesweeperButton) e.getSource();
-        int row = button.getRow();
-        int column = button.getColumn();
-        System.out.println("row = " + row + ", column = " + column + ", bomb count = " + button.getBombCount());
-        if (isBomb(button)) {
-            setButtonStatus(button);
-            System.out.println("Game Over");
-        } else if (isBlank(button)) {
-            spreadBlanks(button);
-//            recursivelySpreadBlanks(button);
-//            if(isButtonRecursionNeeded(button)){
-//                recursivelySpreadBlanks(button);
-            //}
-        } else {
-            setButtonStatus(button);
-        }
-
-    }
-
     //public boolean
     public boolean isBomb(MinesweeperButton button) {
         boolean isBomb = false;
@@ -113,6 +94,7 @@ public class GridPanel extends JPanel implements ActionListener, MouseListener {
             // Reveal button and set the icon
             button.setRevealed(true);
             button.setIcon(changeButtonIcon(button.getBombCount()));
+            revealedAmount++;
         }
     }
 
@@ -133,10 +115,10 @@ public class GridPanel extends JPanel implements ActionListener, MouseListener {
     public void spreadBlanks(MinesweeperButton button) {
         if (button == null) {
             //stop recursion, invalid button
-            System.out.println("button is outside the board, stop spread blanks");
+            //System.out.println("button is outside the board, stop spread blanks");
         } else if (!isButtonRecursionNeeded(button)) {
             //if false, stop recursion
-            System.out.println("if button is already revealed and/or is blank, don't spread to that square");
+            //System.out.println("if button is already revealed and/or is blank, don't spread to that square");
             setButtonStatus(button);
         } else {
             //now spread surrounding buttons
@@ -144,7 +126,7 @@ public class GridPanel extends JPanel implements ActionListener, MouseListener {
             int row = button.getRow();
             int column = button.getColumn();
 
-            System.out.println("recursively spreading blanks for button, " + row + ", " + column);
+            //System.out.println("recursively spreading blanks for button, " + row + ", " + column);
             //set the button's status to be revealed and sets the button's icon
             setButtonStatus(button);
             //get north button and recursively spread blanks
@@ -169,9 +151,30 @@ public class GridPanel extends JPanel implements ActionListener, MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         MinesweeperButton button = (MinesweeperButton) e.getSource();
-        if (e.getButton() == MouseEvent.BUTTON3){
+        if (e.getButton() == MouseEvent.BUTTON3 && button.isFlagged() == false){
             button.setFlagged(true);
-            button.setIcon("minesweeperFlag.png");
+            button.setIcon(changeButtonIcon(-2));
+            //System.out.println("button "+button.getRow()+", "+button.getColumn()+" was right clicked");
+        }
+        else if (e.getButton() == MouseEvent.BUTTON3 && button.isFlagged() == true) {
+            button.setIcon(null);
+        }
+        else if(e.getButton() == MouseEvent.BUTTON1){
+            int row = button.getRow();
+            int column = button.getColumn();
+            //System.out.println("row = " + row + ", column = " + column + ", bomb count = " + button.getBombCount());
+            if (isBomb(button)) {
+                setButtonStatus(button);
+                System.out.println("Game Over");
+            } else if (isBlank(button)) {
+                spreadBlanks(button);
+//            recursivelySpreadBlanks(button);
+//            if(isButtonRecursionNeeded(button)){
+//                recursivelySpreadBlanks(button);
+                //}
+            } else {
+                setButtonStatus(button);
+            }
         }
     }
 

@@ -9,6 +9,7 @@ import java.util.Random;
 public class GridButtons {
     static int m_rows = 16;
     static int m_columns = 16;
+    int numberOfBombs = 0;
     Random random = new Random();
     static MinesweeperButton[][] arrayOfButtons = new MinesweeperButton[m_rows][m_columns];
     // find icon for blank squares and bombs
@@ -36,14 +37,17 @@ public class GridButtons {
     }
 
     public void setBombs() {
-        for (int i = 0; i < 40; i++) {
+        while(numberOfBombs<40){
             int randomRow = random.nextInt(15) + 1;
             int randomColumn = random.nextInt(15) + 1;
             MinesweeperButton bomb = arrayOfButtons[randomRow][randomColumn];
-            bomb.setBombCount(-1);
-            int buttonState = bomb.getBombCount();
-            System.out.println("bomb: " + randomRow + ", " + randomColumn + " Button State: " + buttonState);
-            bomb.setIcon(getButtonIcon(buttonState)); //comment back on later
+            if (bomb.getBombCount() == 0) {
+                bomb.setBombCount(-1);
+                int buttonState = bomb.getBombCount();
+                //System.out.println("bomb: " + randomRow + ", " + randomColumn + " Button State: " + buttonState);
+                bomb.setIcon(getButtonIcon(buttonState)); //comment back on later
+                numberOfBombs++;
+            }
         }
     }
     public void setNonBombs(){
@@ -63,7 +67,7 @@ public class GridButtons {
                     int surroundingBombs = getSurroundingBombs(button);
                     if (surroundingBombs>0) {
                         button.setBombCount(surroundingBombs);
-                        button.setIcon(getButtonIcon(surroundingBombs)); //comment back on later
+                        //button.setIcon(getButtonIcon(surroundingBombs)); //comment back on later
                     }
                 }
             }
@@ -80,10 +84,10 @@ public class GridButtons {
         //create URL for file
         URL imageURL = getClass().getResource(iconFileName + ".png");
         //check if imageURL is null/empty
-        System.out.println(imageURL);
+        //System.out.println(imageURL);
         if(imageURL == null){
             //got an invalid url... file doesn't exist
-            System.out.println("imageURL is null, iconFileName:"+iconFileName);
+            //System.out.println("imageURL is null, iconFileName:"+iconFileName);
 
         }
         else{
@@ -134,42 +138,42 @@ public class GridButtons {
 
         //get north button
         temp = getButton(row-1, column);
-        if ( (temp != null) && (temp.isBomb()) ){
+        if ( (temp != null) && (temp.setBomb()) ){
             surroundingBombs++;
         }
         //get north east button
         temp = getButton(row-1, column+1);
-        if ( (temp != null) && (temp.isBomb()) ){
+        if ( (temp != null) && (temp.setBomb()) ){
             surroundingBombs++;
         }
         //get north west bomb
         temp = getButton(row-1, column-1);
-        if ( (temp != null) && (temp.isBomb()) ){
+        if ( (temp != null) && (temp.setBomb()) ){
             surroundingBombs++;
         }
         //get south bomb
         temp = getButton(row+1, column);
-        if ( (temp != null) && (temp.isBomb()) ){
+        if ( (temp != null) && (temp.setBomb()) ){
             surroundingBombs++;
         }
         //get south east bomb
         temp = getButton(row+1, column+1);
-        if ( (temp != null) && (temp.isBomb()) ){
+        if ( (temp != null) && (temp.setBomb()) ){
             surroundingBombs++;
         }
         //get south west bomb
         temp = getButton(row+1, column-1);
-        if ( (temp != null) && (temp.isBomb()) ){
+        if ( (temp != null) && (temp.setBomb()) ){
             surroundingBombs++;
         }
         //get west bomb
         temp = getButton(row, column-1);
-        if ( (temp != null) && (temp.isBomb()) ){
+        if ( (temp != null) && (temp.setBomb()) ){
             surroundingBombs++;
         }
         //get east bomb
         temp = getButton(row, column+1);
-        if ( (temp != null) && (temp.isBomb()) ){
+        if ( (temp != null) && (temp.setBomb()) ){
             surroundingBombs++;
         }
         return surroundingBombs;

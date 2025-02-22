@@ -27,7 +27,7 @@ public class MinesweeperButton extends JButton {
         this.bombCount = bombCount;
     }
 
-    public boolean isBomb(){
+    public boolean setBomb(){
 //        int buttonState = getButtonState();
 //        if (buttonState == -1){
 //            return true;
@@ -37,6 +37,8 @@ public class MinesweeperButton extends JButton {
 //        }
         return getBombCount() == -1;
     }
+
+
     public boolean isBlank(){
         return getBombCount() == 0;
     }
