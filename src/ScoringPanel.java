@@ -24,6 +24,8 @@ public class ScoringPanel extends JPanel implements ActionListener {
         this.add(m_remainingMinesPanel);
         this.add(createRestartButton());
         this.add(m_timerPanel);
+        m_remainingMinesPanel.setNumber(123);
+        m_timerPanel.setNumber(456);
     }
 
     private JButton createRestartButton() {

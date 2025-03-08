@@ -16,7 +16,11 @@ public class GridButtons {
     GridButtons() {
         setupButtons();
     }
+    public void recreateNewButtons(){
+        setupButtons();
+    }
 
+    //assigns row and column to all buttons, then sets state
     void setupButtons() {
         for (int i = 0; i < m_rows; i++) {
             for (int j = 0; j < m_columns; j++) {

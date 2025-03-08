@@ -10,10 +10,11 @@ public class GridPanel extends JPanel implements MouseListener {
     ScoringPanel m_scoringPanel;
     ReplayPanel m_replayPanel;
     Minesweeper m_minesweeper;
-    GridButtons gridButtons;
+    GridButtons m_gridButtons = new GridButtons();
     int revealedAmount = 0;
     int rows = 16;
     int columns = 16;
+
 
     GridPanel() {
         //add(new JButton("grid"));
@@ -27,18 +28,32 @@ public class GridPanel extends JPanel implements MouseListener {
     }
 
     void setupButtons() {
-        GridButtons buttons = new GridButtons();
-        MinesweeperButton[][] array = buttons.getArrayOfButtons();
+        this.removeAll();
+        // Retrieve our buttons from m_gridButtons
+        MinesweeperButton[][] array = m_gridButtons.getArrayOfButtons();
+
+        // now setup each button
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
+                //adds button to panel
                 this.add(array[i][j]);
+
+                //adds mouseListener to button
                 array[i][j].addMouseListener(this);
             }
         }
     }
 
     public void restart() {
-        System.out.println("if won then communicate win with replay panel");
+        System.out.println("Restart from GridPanel");
+
+        //create new buttons (m_gridButtons) on restart
+        m_gridButtons.recreateNewButtons();
+
+        //add new buttons  (m_gridButtons) to our panel (GridPanel)
+        setupButtons();
+
+        this.revalidate();
     }
 
     public void setGamePanel(Minesweeper minesweeper) {
@@ -78,6 +93,7 @@ public class GridPanel extends JPanel implements MouseListener {
         return isBlank;
     }
 
+    //changes icon when clicked
     public void setButtonStatus(MinesweeperButton button) {
         if (button == null) {
             // Button is invalid, does not exist....outside our GRID
@@ -146,8 +162,9 @@ public class GridPanel extends JPanel implements MouseListener {
     @Override
     public void mousePressed(MouseEvent e) {
         MinesweeperButton button = (MinesweeperButton) e.getSource();
-        if (e.getButton() == MouseEvent.BUTTON3 && !button.isFlagged()) {
+        if (e.getButton() == MouseEvent.BUTTON3 && !button.isFlagged() && !button.isRevealed()) {
             button.setFlagged(true);
+            // negative 2 = flag icon
             button.setIcon(changeButtonIcon(-2));
         }
         else if (e.getButton() == MouseEvent.BUTTON3 && button.isFlagged()) {
@@ -157,7 +174,6 @@ public class GridPanel extends JPanel implements MouseListener {
             if (isBomb(button)) {
                 setButtonStatus(button);
                 JOptionPane.showConfirmDialog(null, "You lose... Want to try again?", "Oh no!", JOptionPane.YES_NO_OPTION);
-
             } else if (isBlank(button)) {
                 spreadBlanks(button);
             } else {
