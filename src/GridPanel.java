@@ -47,6 +47,7 @@ public class GridPanel extends JPanel implements MouseListener {
     public void restart() {
         System.out.println("Restart from GridPanel");
 
+
         //create new buttons (m_gridButtons) on restart
         m_gridButtons.recreateNewButtons();
 
@@ -54,6 +55,8 @@ public class GridPanel extends JPanel implements MouseListener {
         setupButtons();
 
         this.revalidate();
+
+
     }
 
     public void setGamePanel(Minesweeper minesweeper) {
@@ -166,9 +169,13 @@ public class GridPanel extends JPanel implements MouseListener {
             button.setFlagged(true);
             // negative 2 = flag icon
             button.setIcon(changeButtonIcon(-2));
+            //call scoringPanel.remainingMinesPanel with flags and bombs
         }
         else if (e.getButton() == MouseEvent.BUTTON3 && button.isFlagged()) {
             button.setIcon(null);
+            button.setRevealed(false);
+            button.setFlagged(false);
+            //call scoringPanel.remainingMinesPanel with flags and bombs
         }
         else if(e.getButton() == MouseEvent.BUTTON1){
             if (isBomb(button)) {

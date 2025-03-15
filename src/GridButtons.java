@@ -9,7 +9,6 @@ import java.util.Random;
 public class GridButtons {
     static int m_rows = 16;
     static int m_columns = 16;
-    int numberOfBombs = 0;
     Random random = new Random();
     static MinesweeperButton[][] arrayOfButtons = new MinesweeperButton[m_rows][m_columns];
     // find icon for blank squares and bombs
@@ -38,9 +37,11 @@ public class GridButtons {
         setBombs();
         // sets each (nonBomb) button's bombs corresponding to the number of surrounding bombs
         setNonBombs();
+        System.out.println("setBombs finished");
     }
 
     public void setBombs() {
+        int numberOfBombs = 0;
         while(numberOfBombs<40){
             int randomRow = random.nextInt(15) + 1;
             int randomColumn = random.nextInt(15) + 1;
@@ -51,8 +52,10 @@ public class GridButtons {
                 //System.out.println("bomb: " + randomRow + ", " + randomColumn + " Button State: " + buttonState);
                 bomb.setIcon(getButtonIcon(buttonState)); //comment back on later
                 numberOfBombs++;
+                //System.out.println("bombs drawn");
             }
         }
+        //System.out.println("Number of Bombs: "+numberOfBombs);
     }
     public void setNonBombs(){
         //1. create two for loops of 16... see setupButtons method

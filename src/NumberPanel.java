@@ -12,12 +12,12 @@ public class NumberPanel extends JPanel {
         numberField = new JTextField("test");
         numberField.setEnabled(false);
         this.add(numberField);
-
-
     }
 
     public void setNumber(int number) {
         numberField.setText(String.valueOf(number));
+        numberField.revalidate();
+        this.revalidate();
     }
 
     public void restart() {

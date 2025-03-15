@@ -42,9 +42,10 @@ public class Minesweeper {
     }
 
     public void restart() {
-        gridPanel.restart();
+
         replayPanel.restart();
         scoringPanel.restart();
+        gridPanel.restart();
         minesweeperFrame.revalidate();
     }
 }

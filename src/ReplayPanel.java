@@ -20,7 +20,7 @@ public class ReplayPanel extends JPanel implements ActionListener {
     }
 
     public void restart() {
-        System.out.println("replay clicks and cursor movements on the minesweeper board");
+        //System.out.println("replay clicks and cursor movements on the minesweeper board");
         //replay clicks and cursor movements on the minesweeper board
     }
 

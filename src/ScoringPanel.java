@@ -49,6 +49,11 @@ public class ScoringPanel extends JPanel implements ActionListener {
     public void setGamePanel(Minesweeper minesweeper) {
         m_minesweeper = minesweeper;
     }
+    //Set the value listed in the panel to number of bombs - flags
+    public void setRemainingMinesPanel(int flags, int bombs){
+        int remainingMines = bombs-flags;
+        m_remainingMinesPanel.setNumber(remainingMines);
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
