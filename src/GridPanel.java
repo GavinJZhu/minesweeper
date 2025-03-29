@@ -12,13 +12,15 @@ public class GridPanel extends JPanel implements MouseListener {
     Minesweeper m_minesweeper;
     GridButtons m_gridButtons = new GridButtons();
     int revealedAmount = 0;
+    int flaggedAmount = 0;
     int rows = 16;
     int columns = 16;
-
-
-    GridPanel() {
+    //make constructor take scoring panel, update grid panel to take scoring panel, set member variable to scoring panel
+    //set remaining bombs to be 40
+    GridPanel(ScoringPanel scoringPanel) {
         //add(new JButton("grid"));
         setup();
+        scoringPanel = new ScoringPanel();
     }
 
     void setup() {
@@ -55,12 +57,13 @@ public class GridPanel extends JPanel implements MouseListener {
         setupButtons();
 
         this.revalidate();
-
+        revealedAmount = 0;
 
     }
 
     public void setGamePanel(Minesweeper minesweeper) {
         m_minesweeper = minesweeper;
+        m_scoringPanel = minesweeper.scoringPanel;
     }
 
     public ImageIcon changeButtonIcon(int surroundingBombs) {
@@ -170,12 +173,16 @@ public class GridPanel extends JPanel implements MouseListener {
             // negative 2 = flag icon
             button.setIcon(changeButtonIcon(-2));
             //call scoringPanel.remainingMinesPanel with flags and bombs
+            flaggedAmount+=1;
+            m_scoringPanel.setRemainingMines(flaggedAmount,40);
         }
         else if (e.getButton() == MouseEvent.BUTTON3 && button.isFlagged()) {
             button.setIcon(null);
             button.setRevealed(false);
             button.setFlagged(false);
             //call scoringPanel.remainingMinesPanel with flags and bombs
+            flaggedAmount-=1;
+            m_scoringPanel.setRemainingMines(flaggedAmount,40);
         }
         else if(e.getButton() == MouseEvent.BUTTON1){
             if (isBomb(button)) {

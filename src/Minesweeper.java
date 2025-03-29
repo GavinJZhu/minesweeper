@@ -22,7 +22,7 @@ public class Minesweeper {
         scoringPanel = new ScoringPanel();
         scoringPanel.setGamePanel(this);
         scoringPanel.setSize(100, 50);
-        gridPanel = new GridPanel();
+        gridPanel = new GridPanel(scoringPanel);
         gridPanel.setPreferredSize(new Dimension(80, 80));
         gridPanel.setGamePanel(this);
         replayPanel = new ReplayPanel();

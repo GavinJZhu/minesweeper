@@ -8,7 +8,6 @@ public class ScoringPanel extends JPanel implements ActionListener {
     NumberPanel m_remainingMinesPanel;
     JButton m_restartButton;
     NumberPanel m_timerPanel;
-    GridPanel m_gridPanel;
     ReplayPanel m_replayPanel;
     Minesweeper m_minesweeper;
 
@@ -24,7 +23,6 @@ public class ScoringPanel extends JPanel implements ActionListener {
         this.add(m_remainingMinesPanel);
         this.add(createRestartButton());
         this.add(m_timerPanel);
-        m_remainingMinesPanel.setNumber(123);
         m_timerPanel.setNumber(456);
     }
 
@@ -50,9 +48,10 @@ public class ScoringPanel extends JPanel implements ActionListener {
         m_minesweeper = minesweeper;
     }
     //Set the value listed in the panel to number of bombs - flags
-    public void setRemainingMinesPanel(int flags, int bombs){
+    public void setRemainingMines(int flags, int bombs){
         int remainingMines = bombs-flags;
         m_remainingMinesPanel.setNumber(remainingMines);
+        m_remainingMinesPanel.revalidate();
     }
 
     @Override

@@ -50,7 +50,7 @@ public class GridButtons {
                 bomb.setBombCount(-1);
                 int buttonState = bomb.getBombCount();
                 //System.out.println("bomb: " + randomRow + ", " + randomColumn + " Button State: " + buttonState);
-                bomb.setIcon(getButtonIcon(buttonState)); //comment back on later
+                //bomb.setIcon(getButtonIcon(buttonState)); //comment back on later
                 numberOfBombs++;
                 //System.out.println("bombs drawn");
             }
