@@ -184,7 +184,7 @@ public class GridPanel extends JPanel implements MouseListener {
             flaggedAmount-=1;
             m_scoringPanel.setRemainingMines(flaggedAmount,40);
         }
-        else if(e.getButton() == MouseEvent.BUTTON1){
+        else if(e.getButton() == MouseEvent.BUTTON1 && !button.isFlagged()){
             if (isBomb(button)) {
                 setButtonStatus(button);
                 JOptionPane.showConfirmDialog(null, "You lose... Want to try again?", "Oh no!", JOptionPane.YES_NO_OPTION);

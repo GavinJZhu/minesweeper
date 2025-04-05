@@ -9,7 +9,7 @@ public class NumberPanel extends JPanel {
     }
 
     public void setup() {
-        numberField = new JTextField("test");
+        numberField = new JTextField("40");
         numberField.setEnabled(false);
         this.add(numberField);
     }

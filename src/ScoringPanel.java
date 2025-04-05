@@ -10,6 +10,7 @@ public class ScoringPanel extends JPanel implements ActionListener {
     NumberPanel m_timerPanel;
     ReplayPanel m_replayPanel;
     Minesweeper m_minesweeper;
+    private Timer timer;
 
     ScoringPanel() {
         setup();
@@ -22,8 +23,7 @@ public class ScoringPanel extends JPanel implements ActionListener {
         m_timerPanel = new NumberPanel();
         this.add(m_remainingMinesPanel);
         this.add(createRestartButton());
-        this.add(m_timerPanel);
-        m_timerPanel.setNumber(456);
+        addTimer();
     }
 
     private JButton createRestartButton() {
@@ -52,6 +52,20 @@ public class ScoringPanel extends JPanel implements ActionListener {
         int remainingMines = bombs-flags;
         m_remainingMinesPanel.setNumber(remainingMines);
         m_remainingMinesPanel.revalidate();
+    }
+    public void addTimer(){
+        //1 second delay
+        int delay = 1000;
+        this.timer = new Timer(delay, new ActionListener() {
+            int time = 0;
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //update the panel each second that passes
+                m_timerPanel.setNumber(time);
+                m_timerPanel.revalidate();
+                time +=1;
+            }
+        });
     }
 
     @Override
