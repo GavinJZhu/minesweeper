@@ -1,12 +1,14 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
-public class GridPanel extends JPanel implements MouseListener {
+public class GridPanel extends JPanel implements MouseListener, ActionListener {
     ScoringPanel m_scoringPanel;
     ReplayPanel m_replayPanel;
     Minesweeper m_minesweeper;
@@ -15,6 +17,7 @@ public class GridPanel extends JPanel implements MouseListener {
     int flaggedAmount = 0;
     int rows = 16;
     int columns = 16;
+    boolean isTimerStarted = false;
     //make constructor take scoring panel, update grid panel to take scoring panel, set member variable to scoring panel
     //set remaining bombs to be 40
     GridPanel(ScoringPanel scoringPanel) {
@@ -42,6 +45,7 @@ public class GridPanel extends JPanel implements MouseListener {
 
                 //adds mouseListener to button
                 array[i][j].addMouseListener(this);
+                array[i][j].addActionListener(this);
             }
         }
     }
@@ -98,7 +102,13 @@ public class GridPanel extends JPanel implements MouseListener {
         }
         return isBlank;
     }
-
+    public boolean setTimerStarted(Boolean timerStarted){
+        isTimerStarted = timerStarted;
+        return isTimerStarted;
+    }
+    public boolean getTimerStarted(Boolean isTimerStarted){
+        return isTimerStarted;
+    }
     //changes icon when clicked
     public void setButtonStatus(MinesweeperButton button) {
         if (button == null) {
@@ -168,6 +178,7 @@ public class GridPanel extends JPanel implements MouseListener {
     @Override
     public void mousePressed(MouseEvent e) {
         MinesweeperButton button = (MinesweeperButton) e.getSource();
+        //flag a square
         if (e.getButton() == MouseEvent.BUTTON3 && !button.isFlagged() && !button.isRevealed()) {
             button.setFlagged(true);
             // negative 2 = flag icon
@@ -176,6 +187,7 @@ public class GridPanel extends JPanel implements MouseListener {
             flaggedAmount+=1;
             m_scoringPanel.setRemainingMines(flaggedAmount,40);
         }
+        //unflag a square
         else if (e.getButton() == MouseEvent.BUTTON3 && button.isFlagged()) {
             button.setIcon(null);
             button.setRevealed(false);
@@ -184,6 +196,7 @@ public class GridPanel extends JPanel implements MouseListener {
             flaggedAmount-=1;
             m_scoringPanel.setRemainingMines(flaggedAmount,40);
         }
+        //left clicking a square
         else if(e.getButton() == MouseEvent.BUTTON1 && !button.isFlagged()){
             if (isBomb(button)) {
                 setButtonStatus(button);
@@ -198,6 +211,7 @@ public class GridPanel extends JPanel implements MouseListener {
             }
         }
         System.out.println(revealedAmount);
+
     }
 
     @Override
@@ -213,5 +227,13 @@ public class GridPanel extends JPanel implements MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
 
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+       if(!isTimerStarted){
+           setTimerStarted(true);
+           m_scoringPanel.timer.start();
+       }
     }
 }
