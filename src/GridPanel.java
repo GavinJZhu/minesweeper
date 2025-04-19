@@ -200,14 +200,29 @@ public class GridPanel extends JPanel implements MouseListener, ActionListener {
         else if(e.getButton() == MouseEvent.BUTTON1 && !button.isFlagged()){
             if (isBomb(button)) {
                 setButtonStatus(button);
-                JOptionPane.showConfirmDialog(null, "You lose... Want to try again?", "Oh no!", JOptionPane.YES_NO_OPTION);
+                int confirmation1 = JOptionPane.showConfirmDialog(null, "You lose... Want to try again?", "Oh no!", JOptionPane.YES_NO_OPTION);
+                if (confirmation1 == JOptionPane.YES_OPTION){
+                    m_scoringPanel.scoringPanelRestart();
+                }
+                else{
+                    //TBD
+                }
             } else if (isBlank(button)) {
                 spreadBlanks(button);
             } else {
                 setButtonStatus(button);
             }
             if (revealedAmount == 216){
-                JOptionPane.showConfirmDialog(null, "You win! Want to play another?", "Woo hoo!", JOptionPane.YES_NO_OPTION);
+                setTimerStarted(false);
+                m_scoringPanel.timer.stop();
+                int confirmation2 = JOptionPane.showConfirmDialog(null, "You win! Your time was: "+m_scoringPanel.time+"s. Want to play another?", "Woo hoo!", JOptionPane.YES_NO_OPTION);
+                if (confirmation2 == JOptionPane.YES_OPTION){
+                    m_scoringPanel.scoringPanelRestart();
+                }
+                else{
+                    //TBD
+                }
+                m_scoringPanel.m_timerPanel.setNumber(m_scoringPanel.time);
             }
         }
         System.out.println(revealedAmount);

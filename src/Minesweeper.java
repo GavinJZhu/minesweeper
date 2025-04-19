@@ -44,7 +44,6 @@ public class Minesweeper {
     public void restart() {
 
         replayPanel.restart();
-        scoringPanel.restart();
         gridPanel.restart();
         minesweeperFrame.revalidate();
     }

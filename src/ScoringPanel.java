@@ -11,6 +11,7 @@ public class ScoringPanel extends JPanel implements ActionListener {
     ReplayPanel m_replayPanel;
     Minesweeper m_minesweeper;
     public Timer timer;
+    int time = 0;
 
     ScoringPanel() {
         setup();
@@ -41,11 +42,6 @@ public class ScoringPanel extends JPanel implements ActionListener {
         URL imageURL = getClass().getResource("restartbutton.png");
         return new ImageIcon(imageURL);
     }
-
-    public void restart() {
-        System.out.println("reset game, clear game out of replay panel");
-    }
-
     public void setGamePanel(Minesweeper minesweeper) {
         m_minesweeper = minesweeper;
     }
@@ -59,20 +55,23 @@ public class ScoringPanel extends JPanel implements ActionListener {
         //1 second delay
         int delay = 1000;
         this.timer = new Timer(delay, new ActionListener() {
-            int time = 0;
             @Override
             public void actionPerformed(ActionEvent e) {
                 //update the panel each second that passes
                 m_timerPanel.setNumber(time);
                 m_timerPanel.revalidate();
                 time +=1;
-                System.out.println("from timer");
+                //System.out.println("from timer");
             }
         });
     }
 
+    public void scoringPanelRestart(){
+        time = 0;
+        m_minesweeper.restart();
+    }
     @Override
     public void actionPerformed(ActionEvent e) {
-        m_minesweeper.restart();
+        scoringPanelRestart();
     }
 }
