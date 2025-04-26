@@ -11,11 +11,13 @@ public class GridButtons {
     static int m_columns = 16;
     Random random = new Random();
     static MinesweeperButton[][] arrayOfButtons = new MinesweeperButton[m_rows][m_columns];
+
     // find icon for blank squares and bombs
     GridButtons() {
         setupButtons();
     }
-    public void recreateNewButtons(){
+
+    public void recreateNewButtons() {
         setupButtons();
     }
 
@@ -42,7 +44,7 @@ public class GridButtons {
 
     public void setBombs() {
         int numberOfBombs = 0;
-        while(numberOfBombs<40){
+        while (numberOfBombs < 40) {
             int randomRow = random.nextInt(15) + 1;
             int randomColumn = random.nextInt(15) + 1;
             MinesweeperButton bomb = arrayOfButtons[randomRow][randomColumn];
@@ -57,7 +59,8 @@ public class GridButtons {
         }
         //System.out.println("Number of Bombs: "+numberOfBombs);
     }
-    public void setNonBombs(){
+
+    public void setNonBombs() {
         //1. create two for loops of 16... see setupButtons method
         for (int i = 0; i < m_rows; i++) {
             for (int j = 0; j < m_columns; j++) {
@@ -72,7 +75,7 @@ public class GridButtons {
                 else {
                     //get number of bombs surrounding a button
                     int surroundingBombs = getSurroundingBombs(button);
-                    if (surroundingBombs>0) {
+                    if (surroundingBombs > 0) {
                         button.setBombCount(surroundingBombs);
                         //button.setIcon(getButtonIcon(surroundingBombs)); //comment back on later
                     }
@@ -80,6 +83,7 @@ public class GridButtons {
             }
         }
     }
+
     //-1 = bomb, 0 = no surrounding bombs, 1-8 = 1-8 surrounding bombs
     public ImageIcon getButtonIcon(int surroundingBombs) {
         ImageIcon defaultIcon = new ImageIcon();
@@ -92,19 +96,17 @@ public class GridButtons {
         URL imageURL = getClass().getResource(iconFileName + ".png");
         //check if imageURL is null/empty
         //System.out.println(imageURL);
-        if(imageURL == null){
+        if (imageURL == null) {
             //got an invalid url... file doesn't exist
             //System.out.println("imageURL is null, iconFileName:"+iconFileName);
 
-        }
-        else{
+        } else {
             //got a valid url
             BufferedImage image = null;
             try {
                 //reads the url/file and gets an image based off it, BufferedImage
                 image = ImageIO.read(imageURL);
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 //crashes program if there was an error reading file
                 throw new RuntimeException(e);
             }
@@ -113,22 +115,19 @@ public class GridButtons {
         }
         return defaultIcon;
     }
-    public MinesweeperButton[][] getArrayOfButtons(){
+
+    public MinesweeperButton[][] getArrayOfButtons() {
         return arrayOfButtons;
     }
 
-    public static MinesweeperButton getButton(int row, int column){
+    public static MinesweeperButton getButton(int row, int column) {
         MinesweeperButton button = null;  // default.  invalid button...outside of GRID
         //if row and column are valid, get the button; otherwise return null
-        if ((row < 0) || (row >= m_rows)){
+        if ((row < 0) || (row >= m_rows)) {
             // row is invalid...outside our GRID
-        }
-        else if ((column < 0) || (column >= m_columns))
-        {
+        } else if ((column < 0) || (column >= m_columns)) {
             // column is invalid...outside our GRID
-        }
-        else
-        {
+        } else {
             // valid button....inside our GRID
             button = arrayOfButtons[row][column];
         }
@@ -144,43 +143,43 @@ public class GridButtons {
         MinesweeperButton temp = null;
 
         //get north button
-        temp = getButton(row-1, column);
-        if ( (temp != null) && (temp.setBomb()) ){
+        temp = getButton(row - 1, column);
+        if ((temp != null) && (temp.isBomb())) {
             surroundingBombs++;
         }
         //get north east button
-        temp = getButton(row-1, column+1);
-        if ( (temp != null) && (temp.setBomb()) ){
+        temp = getButton(row - 1, column + 1);
+        if ((temp != null) && (temp.isBomb())) {
             surroundingBombs++;
         }
         //get north west bomb
-        temp = getButton(row-1, column-1);
-        if ( (temp != null) && (temp.setBomb()) ){
+        temp = getButton(row - 1, column - 1);
+        if ((temp != null) && (temp.isBomb())) {
             surroundingBombs++;
         }
         //get south bomb
-        temp = getButton(row+1, column);
-        if ( (temp != null) && (temp.setBomb()) ){
+        temp = getButton(row + 1, column);
+        if ((temp != null) && (temp.isBomb())) {
             surroundingBombs++;
         }
         //get south east bomb
-        temp = getButton(row+1, column+1);
-        if ( (temp != null) && (temp.setBomb()) ){
+        temp = getButton(row + 1, column + 1);
+        if ((temp != null) && (temp.isBomb())) {
             surroundingBombs++;
         }
         //get south west bomb
-        temp = getButton(row+1, column-1);
-        if ( (temp != null) && (temp.setBomb()) ){
+        temp = getButton(row + 1, column - 1);
+        if ((temp != null) && (temp.isBomb())) {
             surroundingBombs++;
         }
         //get west bomb
-        temp = getButton(row, column-1);
-        if ( (temp != null) && (temp.setBomb()) ){
+        temp = getButton(row, column - 1);
+        if ((temp != null) && (temp.isBomb())) {
             surroundingBombs++;
         }
         //get east bomb
-        temp = getButton(row, column+1);
-        if ( (temp != null) && (temp.setBomb()) ){
+        temp = getButton(row, column + 1);
+        if ((temp != null) && (temp.isBomb())) {
             surroundingBombs++;
         }
         return surroundingBombs;

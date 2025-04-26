@@ -6,6 +6,7 @@ public class MinesweeperButton extends JButton {
     private int bombCount; //-1 = bomb, 0 = blank, 1-8 = surrounding bomb number
     private boolean revealed = false;
     private boolean flagged = false;
+
     public void setRowColumn(int row, int column) {
         this.row = row;
         this.column = column;
@@ -27,31 +28,28 @@ public class MinesweeperButton extends JButton {
         this.bombCount = bombCount;
     }
 
-    public boolean setBomb(){
-//        int buttonState = getButtonState();
-//        if (buttonState == -1){
-//            return true;
-//        }
-//        else{
-//            return false;
-//        }
-        return getBombCount() == -1;
+    public boolean isBomb() {
+        return bombCount == -1;
     }
 
 
-    public boolean isBlank(){
-        return getBombCount() == 0;
+    public boolean isBlank() {
+        return bombCount == 0;
     }
-    public void setRevealed(boolean setRevealed){
+
+    public void setRevealed(boolean setRevealed) {
         revealed = setRevealed;
     }
-    public boolean isRevealed(){
+
+    public boolean getRevealed() {
         return revealed;
     }
-    public void setFlagged(boolean isFlagged){
+
+    public void setFlagged(boolean isFlagged) {
         flagged = isFlagged;
     }
-    public boolean isFlagged(){
+
+    public boolean getFlagged() {
         return flagged;
     }
 
