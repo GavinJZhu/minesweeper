@@ -10,33 +10,30 @@ import java.io.IOException;
 import java.net.URL;
 
 public class GridPanel extends JPanel implements MouseListener, ActionListener {
-    ScoringPanel m_scoringPanel;
-    Minesweeper m_minesweeper;
-    GridButtons m_gridButtons = new GridButtons();
+    ScoringPanel scoringPanel;
+    Minesweeper minesweeper;
+    GridButtons gridButtons = new GridButtons();
     int revealedAmount = 0;
     int flaggedAmount = 0;
     int rows = 16;
     int columns = 16;
     boolean isTimerStarted = false;
 
-    //make constructor take scoring panel, update grid panel to take scoring panel, set member variable to scoring panel
+    //make constructor take scoring panel
+    //update grid panel to take scoring panel
+    //set member variable to scoring panel
     //set remaining bombs to be 40
-    GridPanel(ScoringPanel scoringPanel) {
-        //add(new JButton("grid"));
-        setup();
-        scoringPanel = new ScoringPanel();
-    }
-
-    void setup() {
+    GridPanel() {
         GridLayout grid = new GridLayout(16, 16);
         setLayout(grid);
         setupButtons();
+        new ScoringPanel();
     }
 
     void setupButtons() {
+        // Retrieve our buttons from gridButtons
         this.removeAll();
-        // Retrieve our buttons from m_gridButtons
-        MinesweeperButton[][] array = m_gridButtons.getArrayOfButtons();
+        MinesweeperButton[][] array = gridButtons.getArrayOfButtons();
 
         // now setup each button
         for (int i = 0; i < rows; i++) {
@@ -54,11 +51,10 @@ public class GridPanel extends JPanel implements MouseListener, ActionListener {
     public void restart() {
         System.out.println("Restart from GridPanel");
 
+        //create new buttons (gridButtons) on restart
+        gridButtons.recreateNewButtons();
 
-        //create new buttons (m_gridButtons) on restart
-        m_gridButtons.recreateNewButtons();
-
-        //add new buttons  (m_gridButtons) to our panel (GridPanel)
+        //add new buttons (gridButtons) to our panel (GridPanel)
         setupButtons();
 
         this.revalidate();
@@ -66,15 +62,9 @@ public class GridPanel extends JPanel implements MouseListener, ActionListener {
         flaggedAmount = 0;
     }
 
-    public void setGamePanel(Minesweeper minesweeper) {
-        m_minesweeper = minesweeper;
-        m_scoringPanel = minesweeper.scoringPanel;
-    }
-
     public ImageIcon changeButtonIcon(int surroundingBombs) {
         String iconFileName = "bomb" + surroundingBombs;
         URL imageURL = getClass().getResource(iconFileName + ".png");
-        //System.out.println(imageURL);
         BufferedImage image = null;
         try {
             image = ImageIO.read(imageURL);
@@ -85,7 +75,6 @@ public class GridPanel extends JPanel implements MouseListener, ActionListener {
         return new ImageIcon(scaledImage);
     }
 
-    //public boolean
     public boolean isBomb(MinesweeperButton button) {
         boolean isBomb = false;
         int buttonState = button.getBombCount();
@@ -95,23 +84,14 @@ public class GridPanel extends JPanel implements MouseListener, ActionListener {
         return isBomb;
     }
 
-    public boolean isBlank(MinesweeperButton button) {
-        boolean isBlank = false;
-        int buttonState = button.getBombCount();
-        if (buttonState == 0) {
-            isBlank = true;
-
-        }
-        return isBlank;
+    public boolean hasSurroundingBombs(MinesweeperButton button) {
+        int bombCount = button.getBombCount();
+        return bombCount == 0;
     }
 
-    //changes icon when clicked
     public void setButtonStatus(MinesweeperButton button) {
-        if (button == null) {
-            // Button is invalid, does not exist....outside our GRID
-        } else if (button.getRevealed()) {
-            // Button has already been revealed...no further processing/checks needed
-        } else {
+        //changes icon when clicked
+        if (button != null && !button.getRevealed()) {
             // Reveal button and set the icon
             button.setRevealed(true);
             button.setIcon(changeButtonIcon(button.getBombCount()));
@@ -181,7 +161,7 @@ public class GridPanel extends JPanel implements MouseListener, ActionListener {
             button.setIcon(changeButtonIcon(-2));
             //call scoringPanel.remainingMinesPanel with flags and bombs
             flaggedAmount += 1;
-            m_scoringPanel.setRemainingMines(flaggedAmount, 40);
+            scoringPanel.setRemainingMines(flaggedAmount, 40);
         }
         //unflag a square
         else if (e.getButton() == MouseEvent.BUTTON3 && button.getFlagged()) {
@@ -190,7 +170,7 @@ public class GridPanel extends JPanel implements MouseListener, ActionListener {
             button.setFlagged(false);
             //call scoringPanel.remainingMinesPanel with flags and bombs
             flaggedAmount -= 1;
-            m_scoringPanel.setRemainingMines(flaggedAmount, 40);
+            scoringPanel.setRemainingMines(flaggedAmount, 40);
         }
         //left clicking a square
         else if (e.getButton() == MouseEvent.BUTTON1 && !button.getFlagged()) {
@@ -198,24 +178,24 @@ public class GridPanel extends JPanel implements MouseListener, ActionListener {
                 setButtonStatus(button);
                 int confirmation1 = JOptionPane.showConfirmDialog(null, "You lose... Want to try again?", "Oh no!", JOptionPane.YES_NO_OPTION);
                 if (confirmation1 == JOptionPane.YES_OPTION) {
-                    m_scoringPanel.scoringPanelRestart();
+                    scoringPanel.scoringPanelRestart();
                 } else {
                     System.exit(0);
                 }
-            } else if (isBlank(button)) {
+            } else if (hasSurroundingBombs(button)) {
                 spreadBlanks(button);
             } else {
                 setButtonStatus(button);
             }
             if (revealedAmount == 216) {
-                m_scoringPanel.timer.stop();
-                int confirmation2 = JOptionPane.showConfirmDialog(null, "You win! Your time was: " + m_scoringPanel.time + "s. Want to play another?", "Woo hoo!", JOptionPane.YES_NO_OPTION);
+                scoringPanel.timer.stop();
+                int confirmation2 = JOptionPane.showConfirmDialog(null, "You win! Your time was: " + scoringPanel.time + "s. Want to play another?", "Woo hoo!", JOptionPane.YES_NO_OPTION);
                 if (confirmation2 == JOptionPane.YES_OPTION) {
-                    m_scoringPanel.scoringPanelRestart();
+                    scoringPanel.scoringPanelRestart();
                 } else {
                     System.exit(0);
                 }
-                m_scoringPanel.m_timerPanel.setNumber(m_scoringPanel.time);
+                scoringPanel.timerPanel.setNumber(scoringPanel.time);
             }
         }
         System.out.println(revealedAmount);
@@ -240,7 +220,7 @@ public class GridPanel extends JPanel implements MouseListener, ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (!isTimerStarted) {
-            m_scoringPanel.timer.start();
+            scoringPanel.timer.start();
         }
     }
 }

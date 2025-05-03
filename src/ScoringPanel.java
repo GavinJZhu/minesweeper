@@ -5,31 +5,31 @@ import java.awt.event.ActionListener;
 import java.net.URL;
 
 public class ScoringPanel extends JPanel implements ActionListener {
-    NumberPanel m_remainingMinesPanel;
-    JButton m_restartButton;
-    NumberPanel m_timerPanel;
-    Minesweeper m_minesweeper;
+    NumberPanel remainingMinesPanel;
+    JButton restartButton;
+    NumberPanel timerPanel;
+    Minesweeper minesweeper;
     public Timer timer;
     int time = 0;
     int remainingMines;
 
     ScoringPanel() {
         setPreferredSize(new Dimension(100, 100));
-        m_remainingMinesPanel = new NumberPanel();
-        m_timerPanel = new NumberPanel();
-        m_remainingMinesPanel.setNumber(40);
-        this.add(m_remainingMinesPanel);
+        remainingMinesPanel = new NumberPanel();
+        timerPanel = new NumberPanel();
+        remainingMinesPanel.setNumber(40);
+        this.add(remainingMinesPanel);
         this.add(createRestartButton());
-        this.add(m_timerPanel);
+        this.add(timerPanel);
         this.addTimer();
     }
 
     private JButton createRestartButton() {
-        m_restartButton = new JButton();
-        m_restartButton.setIcon(loadImageRestartButton());
-        m_restartButton.addActionListener(this);
-        m_restartButton.setPreferredSize(new Dimension(50, 50));
-        return m_restartButton;
+        restartButton = new JButton();
+        restartButton.setIcon(loadImageRestartButton());
+        restartButton.addActionListener(this);
+        restartButton.setPreferredSize(new Dimension(50, 50));
+        return restartButton;
     }
 
     public ImageIcon loadImageRestartButton() {
@@ -38,14 +38,14 @@ public class ScoringPanel extends JPanel implements ActionListener {
     }
 
     public void setGamePanel(Minesweeper minesweeper) {
-        m_minesweeper = minesweeper;
+        this.minesweeper = minesweeper;
     }
 
-    //Set the value listed in the panel to number of bombs - flags
     public void setRemainingMines(int flags, int bombs) {
+        //Set the value listed in the panel to number of bombs - flags
         remainingMines = bombs - flags;
-        m_remainingMinesPanel.setNumber(remainingMines);
-        m_remainingMinesPanel.revalidate();
+        remainingMinesPanel.setNumber(remainingMines);
+        remainingMinesPanel.revalidate();
     }
 
     public void addTimer() {
@@ -55,9 +55,9 @@ public class ScoringPanel extends JPanel implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //update the panel each second that passes
-                m_timerPanel.setNumber(time);
-                m_timerPanel.revalidate();
-                time += 1;
+                timerPanel.setNumber(time);
+                timerPanel.revalidate();
+                time++;
             }
         });
     }
@@ -65,7 +65,7 @@ public class ScoringPanel extends JPanel implements ActionListener {
     public void scoringPanelRestart() {
         time = 0;
         setRemainingMines(0, 40);
-        m_minesweeper.restart();
+        minesweeper.restart();
     }
 
     @Override

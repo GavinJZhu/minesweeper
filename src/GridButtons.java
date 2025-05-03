@@ -1,36 +1,24 @@
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.URL;
 import java.util.Random;
 
 public class GridButtons {
-    static int m_rows = 16;
-    static int m_columns = 16;
+    static int rows = 16;
+    static int columns = 16;
     Random random = new Random();
-    static MinesweeperButton[][] arrayOfButtons = new MinesweeperButton[m_rows][m_columns];
+    static MinesweeperButton[][] arrayOfButtons = new MinesweeperButton[rows][columns];
 
     // find icon for blank squares and bombs
     GridButtons() {
-        setupButtons();
+        createGrid();
     }
 
-    public void recreateNewButtons() {
-        setupButtons();
-    }
-
-    //assigns row and column to all buttons, then sets state
-    void setupButtons() {
-        for (int i = 0; i < m_rows; i++) {
-            for (int j = 0; j < m_columns; j++) {
+    private void createGrid() {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
                 MinesweeperButton button = new MinesweeperButton();
-                //button.setIcon(getButtonIcon(8)); //move to setButtonState
-                button.setRowColumn(i, j);
                 // Sets button location. Saves a button at row&column
-                arrayOfButtons[i][j] = button;
+                button.setRowColumn(i, j);
                 //****set each button icon to be blank****
+                arrayOfButtons[i][j] = button;
                 //defaults each button to 0 bombs
                 button.setBombCount(0);
             }
@@ -39,8 +27,13 @@ public class GridButtons {
         setBombs();
         // sets each (nonBomb) button's bombs corresponding to the number of surrounding bombs
         setNonBombs();
-        System.out.println("setBombs finished");
     }
+
+    public void recreateNewButtons() {
+        createGrid();
+    }
+
+    //assigns row and column to all buttons, then sets state
 
     public void setBombs() {
         int numberOfBombs = 0;
@@ -50,88 +43,41 @@ public class GridButtons {
             MinesweeperButton bomb = arrayOfButtons[randomRow][randomColumn];
             if (bomb.getBombCount() == 0) {
                 bomb.setBombCount(-1);
-                int buttonState = bomb.getBombCount();
-                //System.out.println("bomb: " + randomRow + ", " + randomColumn + " Button State: " + buttonState);
-                //bomb.setIcon(getButtonIcon(buttonState)); //comment back on later
                 numberOfBombs++;
-                //System.out.println("bombs drawn");
             }
         }
-        //System.out.println("Number of Bombs: "+numberOfBombs);
     }
 
     public void setNonBombs() {
         //1. create two for loops of 16... see setupButtons method
-        for (int i = 0; i < m_rows; i++) {
-            for (int j = 0; j < m_columns; j++) {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
                 //2.    check if a button has a state of -1
                 MinesweeperButton button = arrayOfButtons[i][j];
-                int bc = button.getBombCount();
+                int bombCount = button.getBombCount();
                 //3.    if button's state is -1, move on to next button
-                if (bc == -1) {
-                    //skip button because bombs are already set
-                }
                 //4.    if button's state is not -1, check number of surrounding bombs... call a method getSurroundingBombs
-                else {
+                //skip button because bombs are already set
+                if (bombCount != -1) {
                     //get number of bombs surrounding a button
                     int surroundingBombs = getSurroundingBombs(button);
                     if (surroundingBombs > 0) {
                         button.setBombCount(surroundingBombs);
-                        //button.setIcon(getButtonIcon(surroundingBombs)); //comment back on later
                     }
                 }
             }
         }
     }
-
-    //-1 = bomb, 0 = no surrounding bombs, 1-8 = 1-8 surrounding bombs
-    public ImageIcon getButtonIcon(int surroundingBombs) {
-        ImageIcon defaultIcon = new ImageIcon();
-        //creates string to convert surrounding bombs int to string
-        String surroundingBombsString = String.valueOf(surroundingBombs);
-        //System.out.println(surroundingBombsString);
-        //create filename based off surrounding bombs
-        String iconFileName = "bomb" + surroundingBombsString;
-        //create URL for file
-        URL imageURL = getClass().getResource(iconFileName + ".png");
-        //check if imageURL is null/empty
-        //System.out.println(imageURL);
-        if (imageURL == null) {
-            //got an invalid url... file doesn't exist
-            //System.out.println("imageURL is null, iconFileName:"+iconFileName);
-
-        } else {
-            //got a valid url
-            BufferedImage image = null;
-            try {
-                //reads the url/file and gets an image based off it, BufferedImage
-                image = ImageIO.read(imageURL);
-            } catch (IOException e) {
-                //crashes program if there was an error reading file
-                throw new RuntimeException(e);
-            }
-            Image scaledImage = image.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-            return new ImageIcon(scaledImage);
-        }
-        return defaultIcon;
-    }
-
     public MinesweeperButton[][] getArrayOfButtons() {
         return arrayOfButtons;
     }
-
     public static MinesweeperButton getButton(int row, int column) {
-        MinesweeperButton button = null;  // default.  invalid button...outside of GRID
+        MinesweeperButton button = null;
         //if row and column are valid, get the button; otherwise return null
-        if ((row < 0) || (row >= m_rows)) {
-            // row is invalid...outside our GRID
-        } else if ((column < 0) || (column >= m_columns)) {
-            // column is invalid...outside our GRID
-        } else {
+        if ((row >= 0) && (row < rows) && (column >= 0) && (column < columns)) {
             // valid button....inside our GRID
             button = arrayOfButtons[row][column];
         }
-
         return button;
     }
 
@@ -140,48 +86,39 @@ public class GridButtons {
         int column = button.getColumn();
         int surroundingBombs = 0;
 
-        MinesweeperButton temp = null;
+        MinesweeperButton temp;
 
         //get north button
         temp = getButton(row - 1, column);
-        if ((temp != null) && (temp.isBomb())) {
-            surroundingBombs++;
-        }
-        //get north east button
+        surroundingBombs += isNeighborBomb(temp);
+        //get northeast button
         temp = getButton(row - 1, column + 1);
-        if ((temp != null) && (temp.isBomb())) {
-            surroundingBombs++;
-        }
-        //get north west bomb
+        surroundingBombs += isNeighborBomb(temp);
+        //get northwest bomb
         temp = getButton(row - 1, column - 1);
-        if ((temp != null) && (temp.isBomb())) {
-            surroundingBombs++;
-        }
+        surroundingBombs += isNeighborBomb(temp);
         //get south bomb
         temp = getButton(row + 1, column);
-        if ((temp != null) && (temp.isBomb())) {
-            surroundingBombs++;
-        }
-        //get south east bomb
+        surroundingBombs += isNeighborBomb(temp);
+        //get southeast bomb
         temp = getButton(row + 1, column + 1);
-        if ((temp != null) && (temp.isBomb())) {
-            surroundingBombs++;
-        }
-        //get south west bomb
+        surroundingBombs += isNeighborBomb(temp);
+        //get southwest bomb
         temp = getButton(row + 1, column - 1);
-        if ((temp != null) && (temp.isBomb())) {
-            surroundingBombs++;
-        }
+        surroundingBombs += isNeighborBomb(temp);
         //get west bomb
         temp = getButton(row, column - 1);
-        if ((temp != null) && (temp.isBomb())) {
-            surroundingBombs++;
-        }
+        surroundingBombs += isNeighborBomb(temp);
         //get east bomb
         temp = getButton(row, column + 1);
-        if ((temp != null) && (temp.isBomb())) {
-            surroundingBombs++;
-        }
+        surroundingBombs += isNeighborBomb(temp);
         return surroundingBombs;
+    }
+
+    private static int isNeighborBomb(MinesweeperButton temp) {
+        if ((temp != null) && (temp.isBomb())) {
+            return 1;
+        }
+        return 0;
     }
 }

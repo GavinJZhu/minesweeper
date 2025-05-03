@@ -20,9 +20,10 @@ public class Minesweeper {
         scoringPanel = new ScoringPanel();
         scoringPanel.setGamePanel(this);
         scoringPanel.setSize(100, 50);
-        gridPanel = new GridPanel(scoringPanel);
+        gridPanel = new GridPanel();
         gridPanel.setPreferredSize(new Dimension(80, 80));
-        gridPanel.setGamePanel(this);
+        gridPanel.minesweeper = this;
+        gridPanel.scoringPanel = scoringPanel;
     }
 
     public void setup() {
