@@ -65,7 +65,7 @@ public class GridPanel extends JPanel implements MouseListener, ActionListener {
     public ImageIcon changeButtonIcon(int surroundingBombs) {
         String iconFileName = "bomb" + surroundingBombs;
         URL imageURL = getClass().getResource(iconFileName + ".png");
-        BufferedImage image = null;
+        BufferedImage image;
         try {
             image = ImageIO.read(imageURL);
         } catch (IOException e) {
@@ -84,12 +84,14 @@ public class GridPanel extends JPanel implements MouseListener, ActionListener {
         return isBomb;
     }
 
-    public boolean hasSurroundingBombs(MinesweeperButton button) {
+    public boolean hasNeighboringBombs(MinesweeperButton button) {
+        //if a button has no neighboring bombs return true
+        //otherwise, return false
         int bombCount = button.getBombCount();
         return bombCount == 0;
     }
 
-    public void setButtonStatus(MinesweeperButton button) {
+    public void revealButton(MinesweeperButton button) {
         //changes icon when clicked
         if (button != null && !button.getRevealed()) {
             // Reveal button and set the icon
@@ -102,59 +104,56 @@ public class GridPanel extends JPanel implements MouseListener, ActionListener {
     }
 
     public boolean isButtonRecursionNeeded(MinesweeperButton button) {
-        boolean isButtonRecursionNeeded = false;
-        if (button == null) {
-            //button off the board
-        } else if (!button.isBlank()) {
-            //recursion not needed, not a blank
-        } else if (button.getRevealed()) {
-            //recursion not needed, already revealed
-        } else {
-            isButtonRecursionNeeded = true;
-        }
-        return isButtonRecursionNeeded;
+        //if the button is off the board, return false
+        //if the button is not a blank, return false
+        //if the button is already revealed because we've already done recursion or clicked it, return false
+        //otherwise, return true
+        return button != null && button.isBlank() && !button.getRevealed();
     }
 
     public void spreadBlanks(MinesweeperButton button) {
+        //if neighboring button is off the board, don't recurse that button
+        //if neighboring button recursion is not needed, don't recurse that button
+        //otherwise, continue recursion
         if (button == null) {
-            //stop recursion, invalid button
-        } else if (!isButtonRecursionNeeded(button)) {
-            //if false, stop recursion
-            setButtonStatus(button);
-        } else {
-            //now spread surrounding buttons
-            //get row and column array indices
-            int row = button.getRow();
-            int column = button.getColumn();
-            //set the button's status to be revealed and sets the button's icon
-            setButtonStatus(button);
-            //get north button and recursively spread blanks
-            spreadBlanks(GridButtons.getButton(row - 1, column));
-            //get northeast button and recursively spread blanks
-            spreadBlanks(GridButtons.getButton(row - 1, column + 1));
-            //get northwest button and recursively spread blanks
-            spreadBlanks(GridButtons.getButton(row - 1, column - 1));
-            //get east button and recursively spread blanks
-            spreadBlanks(GridButtons.getButton(row, column + 1));
-            //get west button and recursively spread blanks
-            spreadBlanks(GridButtons.getButton(row, column - 1));
-            //get south button and recursively spread blanks
-            spreadBlanks(GridButtons.getButton(row + 1, column));
-            //get southeast button and recursively spread blanks
-            spreadBlanks(GridButtons.getButton(row + 1, column + 1));
-            //get southwest button and recursively spread blanks
-            spreadBlanks(GridButtons.getButton(row + 1, column - 1));
+            return;
         }
+        if (!isButtonRecursionNeeded(button)) {
+            revealButton(button);
+            return;
+        }
+        //now spread surrounding buttons
+        int row = button.getRow();
+        int column = button.getColumn();
+        //set the button's status to be revealed and sets the button's icon
+        revealButton(button);
+        //get north button and recursively spread blanks
+        spreadBlanks(GridButtons.getButton(row - 1, column));
+        //get northeast button and recursively spread blanks
+        spreadBlanks(GridButtons.getButton(row - 1, column + 1));
+        //get northwest button and recursively spread blanks
+        spreadBlanks(GridButtons.getButton(row - 1, column - 1));
+        //get east button and recursively spread blanks
+        spreadBlanks(GridButtons.getButton(row, column + 1));
+        //get west button and recursively spread blanks
+        spreadBlanks(GridButtons.getButton(row, column - 1));
+        //get south button and recursively spread blanks
+        spreadBlanks(GridButtons.getButton(row + 1, column));
+        //get southeast button and recursively spread blanks
+        spreadBlanks(GridButtons.getButton(row + 1, column + 1));
+        //get southwest button and recursively spread blanks
+        spreadBlanks(GridButtons.getButton(row + 1, column - 1));
     }
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-    }
 
     @Override
     public void mousePressed(MouseEvent e) {
         MinesweeperButton button = (MinesweeperButton) e.getSource();
         //flag a square
+        //checks if the button was right-clicked
+        //checks if the button hasn't been flagged
+        //checks if the button hasn't been revealed
+        //if these statements are false, skip over the if statement
         if (e.getButton() == MouseEvent.BUTTON3 && !button.getFlagged() && !button.getRevealed()) {
             button.setFlagged(true);
             // negative 2 = flag icon
@@ -164,6 +163,9 @@ public class GridPanel extends JPanel implements MouseListener, ActionListener {
             scoringPanel.setRemainingMines(flaggedAmount, 40);
         }
         //unflag a square
+        //checks if button was right-clicked
+        //checks if button was flagged
+        //if these statements are false, skip over the if statement
         else if (e.getButton() == MouseEvent.BUTTON3 && button.getFlagged()) {
             button.setIcon(null);
             button.setRevealed(false);
@@ -172,24 +174,38 @@ public class GridPanel extends JPanel implements MouseListener, ActionListener {
             flaggedAmount -= 1;
             scoringPanel.setRemainingMines(flaggedAmount, 40);
         }
-        //left clicking a square
+        //left-clicking a square
+        //checks if button was left-clicked
+        //checks if button hasn't been flagged
+        //if these statements are false, skip over the if statement
         else if (e.getButton() == MouseEvent.BUTTON1 && !button.getFlagged()) {
+            //checks if the button is a bomb
             if (isBomb(button)) {
-                setButtonStatus(button);
+                revealButton(button);
                 int confirmation1 = JOptionPane.showConfirmDialog(null, "You lose... Want to try again?", "Oh no!", JOptionPane.YES_NO_OPTION);
+                //checks for user's input on gui when losing the game
                 if (confirmation1 == JOptionPane.YES_OPTION) {
                     scoringPanel.scoringPanelRestart();
                 } else {
                     System.exit(0);
                 }
-            } else if (hasSurroundingBombs(button)) {
-                spreadBlanks(button);
-            } else {
-                setButtonStatus(button);
             }
+            //if button clicked isn't a bomb, check if there are surrounding bombs
+            //if there are none, then start recursion
+            else if (hasNeighboringBombs(button)) {
+                spreadBlanks(button);
+            }
+            //otherwise, reveal the button
+            else {
+                revealButton(button);
+            }
+            //hardcoded to 216 because there are 256 buttons on the board, and 40 bombs
+            //if the user has revealed 216 buttons without dying
+            //the user has won, as they have revealed all the non-bomb buttons
             if (revealedAmount == 216) {
                 scoringPanel.timer.stop();
                 int confirmation2 = JOptionPane.showConfirmDialog(null, "You win! Your time was: " + scoringPanel.time + "s. Want to play another?", "Woo hoo!", JOptionPane.YES_NO_OPTION);
+                //checks for user's input on gui when winning the game
                 if (confirmation2 == JOptionPane.YES_OPTION) {
                     scoringPanel.scoringPanelRestart();
                 } else {
@@ -199,22 +215,22 @@ public class GridPanel extends JPanel implements MouseListener, ActionListener {
             }
         }
         System.out.println(revealedAmount);
+    }
 
+    @Override
+    public void mouseClicked(MouseEvent e) {
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
-
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-
     }
 
     @Override
