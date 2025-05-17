@@ -93,7 +93,7 @@ public class GridPanel extends JPanel implements MouseListener, ActionListener {
 
     public void revealButton(MinesweeperButton button) {
         //changes icon when clicked
-        if (button != null && !button.getRevealed()) {
+        if (button != null && !button.isRevealed()) {
             // Reveal button and set the icon
             button.setRevealed(true);
             button.setIcon(changeButtonIcon(button.getBombCount()));
@@ -108,7 +108,7 @@ public class GridPanel extends JPanel implements MouseListener, ActionListener {
         //if the button is not a blank, return false
         //if the button is already revealed because we've already done recursion or clicked it, return false
         //otherwise, return true
-        return button != null && button.isBlank() && !button.getRevealed();
+        return button != null && button.isBlank() && !button.isRevealed();
     }
 
     public void spreadBlanks(MinesweeperButton button) {
@@ -154,7 +154,7 @@ public class GridPanel extends JPanel implements MouseListener, ActionListener {
         //checks if the button hasn't been flagged
         //checks if the button hasn't been revealed
         //if these statements are false, skip over the if statement
-        if (e.getButton() == MouseEvent.BUTTON3 && !button.getFlagged() && !button.getRevealed()) {
+        if (e.getButton() == MouseEvent.BUTTON3 && !button.getFlagged() && !button.isRevealed()) {
             button.setFlagged(true);
             // negative 2 = flag icon
             button.setIcon(changeButtonIcon(-2));
@@ -182,9 +182,9 @@ public class GridPanel extends JPanel implements MouseListener, ActionListener {
             //checks if the button is a bomb
             if (isBomb(button)) {
                 revealButton(button);
-                int confirmation1 = JOptionPane.showConfirmDialog(null, "You lose... Want to try again?", "Oh no!", JOptionPane.YES_NO_OPTION);
+                int confirmation = JOptionPane.showConfirmDialog(null, "You lose... Want to try again?", "Oh no!", JOptionPane.YES_NO_OPTION);
                 //checks for user's input on gui when losing the game
-                if (confirmation1 == JOptionPane.YES_OPTION) {
+                if (confirmation == JOptionPane.YES_OPTION) {
                     scoringPanel.scoringPanelRestart();
                 } else {
                     System.exit(0);
@@ -204,9 +204,9 @@ public class GridPanel extends JPanel implements MouseListener, ActionListener {
             //the user has won, as they have revealed all the non-bomb buttons
             if (revealedAmount == 216) {
                 scoringPanel.timer.stop();
-                int confirmation2 = JOptionPane.showConfirmDialog(null, "You win! Your time was: " + scoringPanel.time + "s. Want to play another?", "Woo hoo!", JOptionPane.YES_NO_OPTION);
+                int confirmation = JOptionPane.showConfirmDialog(null, "You win! Your time was: " + scoringPanel.time + "s. Want to play another?", "Woo hoo!", JOptionPane.YES_NO_OPTION);
                 //checks for user's input on gui when winning the game
-                if (confirmation2 == JOptionPane.YES_OPTION) {
+                if (confirmation == JOptionPane.YES_OPTION) {
                     scoringPanel.scoringPanelRestart();
                 } else {
                     System.exit(0);
